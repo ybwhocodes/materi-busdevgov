@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Good Corporate Governance (GCG)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Inter", sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      /* Required Chart Container Styling */
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 300px;
+        max-height: 400px;
+      }
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 350px;
+        }
+      }
+
+      /* Custom Scrollbar for inner content */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f5f5f4;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #d6d3d1;
+        border-radius: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #a8a29e;
+      }
+
+      /* Animation Classes */
+      .fade-in {
+        animation: fadeIn 0.4s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .tab-active {
+        border-bottom: 3px solid #0f766e;
+        color: #0f766e;
+        font-weight: 600;
+      }
+      .tab-inactive {
+        color: #78716c;
+        border-bottom: 3px solid transparent;
+      }
+      .tab-inactive:hover {
+        color: #292524;
+        border-color: #d6d3d1;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-stone-50 text-stone-800 antialiased min-h-screen flex flex-col"
+  >
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Teal (Trust/Governance) and Amber (Warning/Challenges) accents -->
+
+    <!-- Application Structure Plan: 
+         Structure: Tab-based Single Page Application.
+         Reasoning: The report contains distinct conceptual parts (Definition, Pillars, Benefits, Challenges). A tabbed interface prevents cognitive overload and allows users to focus on one thematic area at a time.
+         - Tab 1: Konsep Dasar (Introduction & Definition) - Sets the stage.
+         - Tab 2: 5 Pilar Utama - The core interaction. Uses a Radar Chart to show balance and clickable elements to drill down into Transparansi, Akuntabilitas, dll.
+         - Tab 3: Manfaat & Tantangan - Groups outcomes and hurdles. Uses an illustrative Bar Chart for benefits to make abstract concepts visual, and interactive flip/expand cards for challenges.
+    -->
+
+    <!-- Visualization & Content Choices: 
+         - GCG Pillars -> Goal: Organize & Inform -> Viz: Radar Chart (Chart.js) -> Interaction: Click buttons to highlight chart sectors and reveal text details -> Justifies treating GCG as a balanced system. NO SVG.
+         - GCG Benefits -> Goal: Compare/Impact -> Viz: Horizontal Bar Chart (Chart.js) -> Interaction: Hover for tooltips -> Makes qualitative benefits feel concrete via illustrative impact scores. NO SVG.
+         - Conceptual Diagrams -> Goal: Inform -> Viz: CSS/HTML layout with Unicode icons -> Interaction: Hover states -> Clean, text-based visual hierarchy without external images/SVG.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header -->
+    <header
+      class="bg-white shadow-sm border-b border-stone-200 sticky top-0 z-50"
+    >
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center py-4"
+        >
+          <div class="flex items-center">
+            <a href="https://ybwhocodes.github.io/materi-busdevgov/">
+              <img
+                src="logo-busdev.png"
+                alt="Logo Busdev"
+                class="h-auto w-auto"
+              />
+            </a>
+          </div>
+
+          <!-- Navigation Tabs -->
+          <nav
+            class="flex space-x-1 sm:space-x-4 overflow-x-auto w-full md:w-auto pb-1"
+            aria-label="Tabs"
+          >
+            <button
+              onclick="switchTab('tab-konsep')"
+              id="nav-konsep"
+              class="tab-active whitespace-nowrap py-2 px-3 text-sm font-medium transition-colors duration-200"
+            >
+              1. Konsep Dasar
+            </button>
+            <button
+              onclick="switchTab('tab-pilar')"
+              id="nav-pilar"
+              class="tab-inactive whitespace-nowrap py-2 px-3 text-sm font-medium transition-colors duration-200"
+            >
+              2. Eksplorasi Pilar
+            </button>
+            <button
+              onclick="switchTab('tab-dampak')"
+              id="nav-dampak"
+              class="tab-inactive whitespace-nowrap py-2 px-3 text-sm font-medium transition-colors duration-200"
+            >
+              3. Manfaat & Tantangan
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- ========================================== -->
+      <!-- TAB 1: KONSEP DASAR                        -->
+      <!-- ========================================== -->
+      <section id="tab-konsep" class="fade-in block">
+        <div
+          class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8"
+        >
+          <div class="mb-8 border-l-4 border-teal-600 pl-4">
+            <h2 class="text-2xl font-bold text-stone-900 mb-2">Memahami GCG</h2>
+            <p class="text-stone-600 leading-relaxed">
+              Bagian ini memperkenalkan fondasi dari Laporan Tata Kelola. GCG
+              bukan sekadar kepatuhan regulasi, melainkan strategi fundamental.
+              Silakan baca ringkasan di bawah dan amati diagram interaktif untuk
+              memahami hubungan antar pemangku kepentingan.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 class="text-xl font-semibold text-teal-800 mb-3">
+                Definisi Operasional
+              </h3>
+              <p class="text-stone-700 leading-relaxed mb-4">
+                Secara operasional, GCG adalah seperangkat aturan, proses, dan
+                praktik yang mengatur hubungan antara berbagai elemen kunci
+                dalam perusahaan agar tercipta hubungan yang tertata,
+                transparan, dan akuntabel.
+              </p>
+              <p class="text-stone-700 leading-relaxed mb-4">
+                Tujuan utamanya adalah mengarahkan dan mengendalikan perusahaan
+                untuk mencapai
+                <strong>tujuan jangka panjang yang berkelanjutan</strong> dan
+                menciptakan nilai ekonomi.
+              </p>
+              <div
+                class="bg-stone-100 rounded-lg p-4 mt-6 border border-stone-200"
+              >
+                <p
+                  class="text-sm text-stone-500 font-medium uppercase tracking-wider mb-2"
+                >
+                  Kutipan Kunci Referensi
+                </p>
+                <blockquote class="italic text-stone-700">
+                  "Pondasi awal standar GCG dunia diletakkan pada The Financial
+                  Aspects of Corporate Governance." <br /><span
+                    class="text-xs text-stone-500 font-normal mt-1 block"
+                    >- Cadbury, A. (1992)</span
+                  >
+                </blockquote>
+              </div>
+            </div>
+
+            <!-- CSS-Based Conceptual Diagram (NO SVG) -->
+            <div
+              class="bg-stone-50 p-6 rounded-xl border border-stone-200 flex flex-col items-center justify-center relative min-h-[300px]"
+            >
+              <p
+                class="text-sm font-semibold text-stone-500 mb-6 text-center uppercase tracking-wider"
+              >
+                Ekosistem Pemangku Kepentingan
+              </p>
+
+              <!-- Core Company -->
+              <div
+                class="z-10 bg-teal-700 text-white w-32 h-32 rounded-full flex flex-col items-center justify-center shadow-lg border-4 border-white mb-8 hover:scale-105 transition-transform cursor-default"
+              >
+                <span class="text-3xl mb-1">&#127981;</span>
+                <!-- Factory/Building -->
+                <span class="font-bold text-sm">Perusahaan</span>
+              </div>
+
+              <!-- Orbiting Elements via Flex Layout -->
+              <div class="flex flex-wrap justify-center gap-4 w-full">
+                <div
+                  class="bg-white border border-stone-300 shadow-sm rounded-lg px-4 py-2 text-center text-sm font-medium text-stone-700 hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-default"
+                >
+                  &#128188; Direksi
+                </div>
+                <div
+                  class="bg-white border border-stone-300 shadow-sm rounded-lg px-4 py-2 text-center text-sm font-medium text-stone-700 hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-default"
+                >
+                  &#128083; Komisaris
+                </div>
+                <div
+                  class="bg-white border border-stone-300 shadow-sm rounded-lg px-4 py-2 text-center text-sm font-medium text-stone-700 hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-default"
+                >
+                  &#128176; Pemegang Saham
+                </div>
+                <div
+                  class="bg-white border border-stone-300 shadow-sm rounded-lg px-4 py-2 text-center text-sm font-medium text-stone-700 hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-default"
+                >
+                  &#128101; Karyawan & Publik
+                </div>
+              </div>
+
+              <!-- Decorative connecting lines using CSS borders -->
+              <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-dashed border-stone-300 rounded-full z-0 opacity-50 pointer-events-none"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 2: EKSPLORASI PILAR                    -->
+      <!-- ========================================== -->
+      <section id="tab-pilar" class="hidden">
+        <div
+          class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8"
+        >
+          <div class="mb-8 border-l-4 border-amber-500 pl-4">
+            <h2 class="text-2xl font-bold text-stone-900 mb-2">
+              5 Pilar Utama GCG (TARIF)
+            </h2>
+            <p class="text-stone-600 leading-relaxed">
+              Bagian ini membedah inti laporan: Prinsip-prinsip GCG. GCG bekerja
+              paling baik ketika semua pilar seimbang.
+              <strong>Klik tombol pilar di sebelah kiri</strong> untuk melihat
+              bagaimana diagram radar beradaptasi dan membaca rincian praktik
+              serta referensi akademis untuk setiap prinsip.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Interactive Controls & Chart -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+              <div class="flex flex-wrap gap-2" id="pillar-buttons">
+                <!-- Buttons generated by JS -->
+              </div>
+
+              <!-- Chart Container - Crucial for responsive limits -->
+              <div class="bg-stone-50 border border-stone-200 rounded-xl p-4">
+                <h3
+                  class="text-center text-sm font-bold text-stone-500 uppercase tracking-widest mb-2"
+                >
+                  Keseimbangan Sistem GCG
+                </h3>
+                <div class="chart-container">
+                  <canvas id="radarChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detail Panel -->
+            <div class="lg:col-span-7">
+              <div
+                id="pillar-detail-card"
+                class="bg-stone-50 rounded-xl border border-stone-200 p-6 md:p-8 h-full transition-all duration-300 shadow-inner"
+              >
+                <!-- Content injected by JS -->
+                <div
+                  class="flex items-center justify-center h-full text-stone-400 flex-col gap-4"
+                >
+                  <span class="text-4xl">&#9757;</span>
+                  <p>
+                    Pilih salah satu pilar di samping untuk mengeksplorasi
+                    detailnya.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 3: DAMPAK & TANTANGAN                  -->
+      <!-- ========================================== -->
+      <section id="tab-dampak" class="hidden">
+        <div class="flex flex-col gap-8">
+          <!-- Dampak Section -->
+          <div
+            class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8"
+          >
+            <div class="mb-6 border-l-4 border-teal-600 pl-4">
+              <h2 class="text-2xl font-bold text-stone-900 mb-2">
+                Manfaat Implementasi
+              </h2>
+              <p class="text-stone-600 leading-relaxed">
+                Arahkan kursor (*hover*) pada grafik batang di bawah ini untuk
+                melihat ilustrasi dampak positif penerapan GCG terhadap kinerja
+                perusahaan, lalu baca penjelasannya di kartu sebelah kanan.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div class="chart-container">
+                <canvas id="barChart"></canvas>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-teal-50 border border-teal-100 p-4 rounded-lg">
+                  <div class="text-2xl mb-2">&#128200;</div>
+                  <h4 class="font-bold text-teal-900 text-sm mb-1">
+                    Kepercayaan Investor
+                  </h4>
+                  <p class="text-xs text-teal-800 leading-relaxed">
+                    Memudahkan perusahaan mendapatkan akses pendanaan dengan
+                    biaya modal yang lebih rendah.
+                  </p>
+                </div>
+                <div class="bg-teal-50 border border-teal-100 p-4 rounded-lg">
+                  <div class="text-2xl mb-2">&#9881;</div>
+                  <h4 class="font-bold text-teal-900 text-sm mb-1">
+                    Efisiensi Operasional
+                  </h4>
+                  <p class="text-xs text-teal-800 leading-relaxed">
+                    Mengurangi risiko penyalahgunaan wewenang melalui sistem
+                    pengawasan yang ketat.
+                  </p>
+                </div>
+                <div class="bg-teal-50 border border-teal-100 p-4 rounded-lg">
+                  <div class="text-2xl mb-2">&#127793;</div>
+                  <h4 class="font-bold text-teal-900 text-sm mb-1">
+                    Keberlanjutan
+                  </h4>
+                  <p class="text-xs text-teal-800 leading-relaxed">
+                    Membantu perusahaan bertahan dalam krisis melalui manajemen
+                    risiko yang lebih baik.
+                  </p>
+                </div>
+                <div class="bg-teal-50 border border-teal-100 p-4 rounded-lg">
+                  <div class="text-2xl mb-2">&#11088;</div>
+                  <h4 class="font-bold text-teal-900 text-sm mb-1">
+                    Reputasi Positif
+                  </h4>
+                  <p class="text-xs text-teal-800 leading-relaxed">
+                    Meningkatkan nilai merek (brand value) di mata konsumen dan
+                    mitra bisnis.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tantangan & Kesimpulan Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div
+              class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8"
+            >
+              <h2
+                class="text-xl font-bold text-stone-900 mb-4 flex items-center gap-2"
+              >
+                <span class="text-amber-500">&#9888;</span> Tantangan dalam
+                Penerapan
+              </h2>
+              <p class="text-stone-600 mb-6 text-sm">
+                Klik baris di bawah ini untuk mengungkap detail setiap
+                tantangan.
+              </p>
+
+              <div class="space-y-3">
+                <!-- Accordion Items -->
+                <div class="border border-stone-200 rounded-lg overflow-hidden">
+                  <button
+                    onclick="toggleAccordion('acc-1')"
+                    class="w-full text-left px-5 py-4 bg-stone-50 hover:bg-stone-100 flex justify-between items-center font-semibold text-stone-800 transition-colors"
+                  >
+                    Budaya Organisasi
+                    <span
+                      id="icon-acc-1"
+                      class="transform transition-transform text-xl"
+                      >&#43;</span
+                    >
+                  </button>
+                  <div
+                    id="acc-1"
+                    class="hidden px-5 py-4 bg-white text-stone-600 text-sm border-t border-stone-200 leading-relaxed"
+                  >
+                    Mengubah pola pikir dari "keuntungan di atas segalanya"
+                    menjadi "pertumbuhan yang beretika". Ini membutuhkan waktu
+                    dan edukasi berkelanjutan.
+                  </div>
+                </div>
+
+                <div class="border border-stone-200 rounded-lg overflow-hidden">
+                  <button
+                    onclick="toggleAccordion('acc-2')"
+                    class="w-full text-left px-5 py-4 bg-stone-50 hover:bg-stone-100 flex justify-between items-center font-semibold text-stone-800 transition-colors"
+                  >
+                    Biaya Kepatuhan
+                    <span
+                      id="icon-acc-2"
+                      class="transform transition-transform text-xl"
+                      >&#43;</span
+                    >
+                  </button>
+                  <div
+                    id="acc-2"
+                    class="hidden px-5 py-4 bg-white text-stone-600 text-sm border-t border-stone-200 leading-relaxed"
+                  >
+                    Investasi awal untuk membangun sistem audit, infrastruktur
+                    teknologi informasi yang transparan, dan biaya konsultan
+                    hukum seringkali dianggap mahal oleh manajemen.
+                  </div>
+                </div>
+
+                <div class="border border-stone-200 rounded-lg overflow-hidden">
+                  <button
+                    onclick="toggleAccordion('acc-3')"
+                    class="w-full text-left px-5 py-4 bg-stone-50 hover:bg-stone-100 flex justify-between items-center font-semibold text-stone-800 transition-colors"
+                  >
+                    Komitmen Pimpinan
+                    <span
+                      id="icon-acc-3"
+                      class="transform transition-transform text-xl"
+                      >&#43;</span
+                    >
+                  </button>
+                  <div
+                    id="acc-3"
+                    class="hidden px-5 py-4 bg-white text-stone-600 text-sm border-t border-stone-200 leading-relaxed"
+                  >
+                    Tanpa keteladanan yang kuat dari dewan komisaris dan direksi
+                    (<i>Tone at the Top</i>), dokumen prinsip GCG hanya akan
+                    berakhir sebagai formalitas belaka.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="lg:col-span-1 bg-stone-800 text-stone-50 rounded-xl shadow-sm p-6 md:p-8 flex flex-col justify-center relative overflow-hidden"
+            >
+              <!-- Decorative background element -->
+              <div
+                class="absolute -right-10 -bottom-10 text-9xl text-stone-700 opacity-20 cursor-default"
+              >
+                &#10077;
+              </div>
+
+              <h2 class="text-xl font-bold text-teal-400 mb-4 z-10">
+                Kesimpulan
+              </h2>
+              <p class="text-sm leading-relaxed mb-4 z-10">
+                Prinsip transparansi, akuntabilitas, dan integritas bukan
+                sekadar slogan, melainkan mesin penggerak bagi kesehatan
+                korporasi.
+              </p>
+              <p
+                class="text-sm leading-relaxed font-semibold text-stone-300 z-10"
+              >
+                Perusahaan yang menerapkan GCG secara konsisten akan memiliki
+                daya saing yang lebih tinggi dan mampu berkontribusi pada
+                terciptanya ekosistem ekonomi yang jujur dan adil.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer / References -->
+    <footer
+      class="bg-stone-900 text-stone-400 py-8 border-t border-stone-800 mt-auto"
+    >
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h4
+          class="text-sm font-bold text-stone-300 tracking-wider uppercase mb-4"
+        >
+          Referensi Akademis Utama
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-xs">
+          <p>
+            1. <span class="text-stone-300">Cadbury, A. (1992).</span> The
+            Financial Aspects of Corporate Governance.
+          </p>
+          <p>
+            2.
+            <span class="text-stone-300"
+              >Monks, R.A.G., & Minow, N. (2011).</span
+            >
+            Corporate Governance.
+          </p>
+          <p>
+            3.
+            <span class="text-stone-300"
+              >Jensen, M.C., & Meckling, W.H. (1976).</span
+            >
+            Theory of the firm.
+          </p>
+          <p>
+            4. <span class="text-stone-300">Solomon, J. (2017).</span> Corporate
+            Governance and Accountability.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+      // ==========================================
+      // 1. STATE & DATA MANAGEMENT
+      // ==========================================
+
+      // Data derived directly from the Source Report (materi_gcg.md)
+      const pillarsData = {
+        transparansi: {
+          title: "Transparansi (Transparency)",
+          icon: "&#128065;", // Eye
+          desc: "Mengharuskan perusahaan menyediakan informasi yang relevan, akurat, dan tepat waktu yang dapat diakses oleh pemangku kepentingan.",
+          tujuan:
+            "Mengurangi asimetri informasi antara manajemen dan investor serta membangun kepercayaan publik.",
+          praktik: [
+            "Publikasi laporan tahunan (Annual Report) dan laporan keuangan yang telah diaudit.",
+            "Pengungkapan struktur kepemilikan dan remunerasi dewan direksi secara terbuka.",
+            "Penyediaan kanal informasi digital yang diperbarui secara berkala.",
+          ],
+          referensi:
+            "Monks, R. A. G., & Minow, N. (2011). Corporate Governance.",
+        },
+        akuntabilitas: {
+          title: "Akuntabilitas (Accountability)",
+          icon: "&#128203;", // Clipboard
+          desc: "Berkaitan dengan kejelasan fungsi, pelaksanaan, dan pertanggungjawaban organ perusahaan sehingga pengelolaan dilakukan secara efektif.",
+          tujuan:
+            "Memastikan setiap elemen memahami peran mereka dan bertanggung jawab atas konsekuensi keputusan.",
+          praktik: [
+            "Penyusunan indikator kinerja utama (KPI) yang jelas bagi direksi.",
+            "Penguatan peran komite audit dan audit internal.",
+            "Penyelenggaraan Rapat Umum Pemegang Saham (RUPS) sebagai forum tertinggi.",
+          ],
+          referensi:
+            "Jensen, M. C., & Meckling, W. H. (1976). Theory of the firm.",
+        },
+        integritas: {
+          title: "Integritas (Integrity)",
+          icon: "&#128142;", // Gem/Diamond
+          desc: "Komitmen moral untuk bertindak jujur, etis, dan konsisten dalam memegang teguh nilai-nilai perusahaan.",
+          tujuan:
+            "Menjadi fondasi karakter agar tidak terjebak dalam praktik ilegal demi keuntungan sesaat.",
+          praktik: [
+            "Penerapan kode etik (Code of Conduct) bagi seluruh karyawan dan pimpinan.",
+            "Kebijakan anti-korupsi dan sistem pelaporan (Whistleblowing System).",
+            "Prosedur ketat dalam menangani benturan kepentingan (Conflict of Interest).",
+          ],
+          referensi:
+            "Solomon, J. (2017). Corporate Governance and Accountability.",
+        },
+        responsibilitas: {
+          title: "Responsibilitas (Responsibility)",
+          icon: "&#127758;", // Globe
+          desc: "Kesesuaian pengelolaan perusahaan terhadap peraturan perundang-undangan dan prinsip korporasi yang sehat.",
+          tujuan:
+            "Memastikan perusahaan menjadi warga korporat yang baik melalui tanggung jawab sosial dan lingkungan (CSR).",
+          praktik: [
+            "Kepatuhan hukum",
+            "Program Tanggung Jawab Sosial (CSR)",
+            "Praktik ramah lingkungan",
+          ],
+          referensi: "Standar Umum GCG",
+        },
+        independensi: {
+          title: "Independensi (Independency)",
+          icon: "&#9878;", // Balance Scale
+          desc: "Keadaan di mana perusahaan dikelola secara profesional tanpa benturan kepentingan dan pengaruh/tekanan dari pihak manapun.",
+          tujuan:
+            "Memastikan pengambilan keputusan objektif dan berpihak pada kepentingan perusahaan secara keseluruhan.",
+          praktik: [
+            "Komisaris Independen",
+            "Pengambilan keputusan tanpa intervensi",
+            "Pemisahan tugas yang jelas",
+          ],
+          referensi: "Standar Umum GCG",
+        },
+      };
+
+      const pillarKeys = Object.keys(pillarsData);
+      let radarChartInstance = null;
+      let barChartInstance = null;
+      let activePillarKey = null;
+
+      // ==========================================
+      // 2. NAVIGATION LOGIC
+      // ==========================================
+      function switchTab(tabId) {
+        // Hide all tabs
+        ["tab-konsep", "tab-pilar", "tab-dampak"].forEach((id) => {
+          document.getElementById(id).classList.add("hidden");
+          document.getElementById(id).classList.remove("fade-in");
+
+          // Update Nav UI
+          const navBtn = document.getElementById("nav-" + id.split("-")[1]);
+          navBtn.classList.remove("tab-active");
+          navBtn.classList.add("tab-inactive");
+        });
+
+        // Show selected tab
+        const activeSection = document.getElementById(tabId);
+        activeSection.classList.remove("hidden");
+        // Small timeout to allow display:block to apply before animating opacity
+        setTimeout(() => activeSection.classList.add("fade-in"), 10);
+
+        // Update Nav UI
+        const activeNavBtn = document.getElementById(
+          "nav-" + tabId.split("-")[1],
+        );
+        activeNavBtn.classList.remove("tab-inactive");
+        activeNavBtn.classList.add("tab-active");
+
+        // Render/Update charts if their tab is opened
+        if (tabId === "tab-pilar" && !radarChartInstance) {
+          initRadarChart();
+          // Select first by default if none selected
+          if (!activePillarKey) selectPillar("transparansi");
+        }
+        if (tabId === "tab-dampak" && !barChartInstance) {
+          initBarChart();
+        }
+      }
+
+      // ==========================================
+      // 3. UI GENERATION & INTERACTION (PILLARS)
+      // ==========================================
+      function generatePillarButtons() {
+        const container = document.getElementById("pillar-buttons");
+        pillarKeys.forEach((key) => {
+          const btn = document.createElement("button");
+          btn.id = `btn-${key}`;
+          btn.className =
+            "flex-1 min-w-[120px] py-2 px-3 bg-white border border-stone-200 rounded-lg shadow-sm text-sm font-semibold text-stone-600 hover:bg-teal-50 hover:border-teal-300 transition-all flex flex-col items-center justify-center gap-1";
+          btn.innerHTML = `<span class="text-xl">${pillarsData[key].icon}</span> <span>${pillarsData[key].title.split(" ")[0]}</span>`;
+          btn.onclick = () => selectPillar(key);
+          container.appendChild(btn);
+        });
+      }
+
+      function selectPillar(key) {
+        activePillarKey = key;
+        const data = pillarsData[key];
+
+        // Update UI Buttons
+        pillarKeys.forEach((k) => {
+          const b = document.getElementById(`btn-${k}`);
+          if (k === key) {
+            b.classList.remove(
+              "bg-white",
+              "text-stone-600",
+              "border-stone-200",
+            );
+            b.classList.add(
+              "bg-teal-600",
+              "text-white",
+              "border-teal-700",
+              "shadow-md",
+            );
+          } else {
+            b.classList.add("bg-white", "text-stone-600", "border-stone-200");
+            b.classList.remove(
+              "bg-teal-600",
+              "text-white",
+              "border-teal-700",
+              "shadow-md",
+            );
+          }
+        });
+
+        // Update Chart
+        updateRadarChart(key);
+
+        // Update Detail Card Content
+        const card = document.getElementById("pillar-detail-card");
+
+        let listHtml = data.praktik
+          .map(
+            (p) =>
+              `<li class="flex items-start gap-2 mb-2"><span class="text-teal-600 mt-0.5">&#10004;</span> <span class="text-stone-700 text-sm leading-relaxed">${p}</span></li>`,
+          )
+          .join("");
+
+        card.innerHTML = `
+                <div class="fade-in">
+                    <div class="flex items-center gap-4 mb-6 border-b border-stone-200 pb-4">
+                        <div class="w-12 h-12 rounded-lg bg-teal-100 flex items-center justify-center text-2xl border border-teal-200">
+                            ${data.icon}
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold text-teal-900">${data.title}</h3>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <p class="text-stone-800 font-medium text-lg mb-2 leading-snug">${data.desc}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-100">
+                            <h4 class="font-bold text-amber-900 text-sm uppercase tracking-wider mb-2">Tujuan Utama</h4>
+                            <p class="text-sm text-amber-800 leading-relaxed">${data.tujuan}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-stone-900 text-sm uppercase tracking-wider mb-3">Contoh Praktik</h4>
+                            <ul class="text-sm">${listHtml}</ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-4 border-t border-stone-200">
+                        <p class="text-xs text-stone-500"><span class="font-bold">Referensi:</span> ${data.referensi}</p>
+                    </div>
+                </div>
+            `;
+      }
+
+      // ==========================================
+      // 4. CHART.JS IMPLEMENTATIONS
+      // ==========================================
+
+      function initRadarChart() {
+        const ctx = document.getElementById("radarChart").getContext("2d");
+
+        // Base configuration showing perfect balance
+        const data = {
+          labels: [
+            "Transparansi",
+            "Akuntabilitas",
+            "Integritas",
+            "Responsibilitas",
+            "Independensi",
+          ],
+          datasets: [
+            {
+              label: "Tingkat Kepentingan Relatif",
+              data: [10, 10, 10, 10, 10], // All equal
+              backgroundColor: "rgba(15, 118, 110, 0.2)", // Teal 700 with opacity
+              borderColor: "rgba(15, 118, 110, 1)",
+              pointBackgroundColor: "rgba(255, 255, 255, 1)",
+              pointBorderColor: "rgba(15, 118, 110, 1)",
+              pointHoverBackgroundColor: "rgba(217, 119, 6, 1)", // Amber 600
+              pointHoverBorderColor: "rgba(217, 119, 6, 1)",
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              borderWidth: 2,
+            },
+          ],
+        };
+
+        const config = {
+          type: "radar",
+          data: data,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false, // CRITICAL for chart-container to work
+            scales: {
+              r: {
+                angleLines: { color: "rgba(0,0,0,0.1)" },
+                grid: { color: "rgba(0,0,0,0.05)" },
+                pointLabels: {
+                  font: { size: 12, family: "'Inter', sans-serif" },
+                  color: "#57534e", // stone-500
+                },
+                ticks: {
+                  display: false, // Hide numeric scale as it's conceptual
+                  min: 0,
+                  max: 12,
+                },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "rgba(28, 25, 23, 0.9)", // stone-900
+                titleFont: { family: "'Inter', sans-serif", size: 14 },
+                bodyFont: { family: "'Inter', sans-serif" },
+                callbacks: {
+                  label: function (context) {
+                    return " Fondasi GCG";
+                  },
+                },
+              },
+            },
+            // Interactive chart click
+            onClick: (e, elements) => {
+              if (elements.length > 0) {
+                const index = elements[0].index;
+                const key = pillarKeys[index];
+                selectPillar(key);
+              }
+            },
+          },
+        };
+
+        radarChartInstance = new Chart(ctx, config);
+      }
+
+      function updateRadarChart(activeKey) {
+        if (!radarChartInstance) return;
+
+        // Highlight the selected pillar by boosting its value slightly and changing point color
+        const index = pillarKeys.indexOf(activeKey);
+        const newData = [10, 10, 10, 10, 10];
+        const pointColors = Array(5).fill("rgba(255, 255, 255, 1)");
+        const pointRadii = Array(5).fill(4);
+
+        if (index !== -1) {
+          newData[index] = 11.5; // Visual pop
+          pointColors[index] = "rgba(217, 119, 6, 1)"; // Amber highlight
+          pointRadii[index] = 8;
+        }
+
+        radarChartInstance.data.datasets[0].data = newData;
+        radarChartInstance.data.datasets[0].pointBackgroundColor = pointColors;
+        radarChartInstance.data.datasets[0].pointRadius = pointRadii;
+        radarChartInstance.update();
+      }
+
+      function initBarChart() {
+        const ctx = document.getElementById("barChart").getContext("2d");
+
+        // Illustrative Data based on section 4 benefits
+        const data = {
+          labels: [
+            "Reputasi Positif",
+            "Keberlanjutan Jangka Panjang",
+            "Efisiensi Operasional",
+            "Kepercayaan Investor",
+          ],
+          datasets: [
+            {
+              label: "Perkiraan Dampak Positif (%)",
+              data: [75, 82, 88, 95],
+              backgroundColor: [
+                "rgba(15, 118, 110, 0.5)", // Teal lighter
+                "rgba(15, 118, 110, 0.7)",
+                "rgba(15, 118, 110, 0.85)",
+                "rgba(15, 118, 110, 1)", // Teal dark
+              ],
+              borderWidth: 0,
+              borderRadius: 4,
+            },
+          ],
+        };
+
+        const config = {
+          type: "bar",
+          data: data,
+          options: {
+            indexAxis: "y", // Horizontal bar chart
+            responsive: true,
+            maintainAspectRatio: false, // CRITICAL
+            scales: {
+              x: {
+                grid: { color: "rgba(0,0,0,0.05)" },
+                max: 100,
+                ticks: {
+                  callback: function (value) {
+                    return value + "%";
+                  },
+                  font: { family: "'Inter', sans-serif" },
+                },
+              },
+              y: {
+                grid: { display: false },
+                ticks: {
+                  font: { family: "'Inter', sans-serif", weight: "500" },
+                  color: "#292524",
+                },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "rgba(28, 25, 23, 0.9)",
+                padding: 12,
+                callbacks: {
+                  label: function (context) {
+                    return ` Dampak: ${context.parsed.x}% (Ilustrasi)`;
+                  },
+                },
+              },
+            },
+          },
+        };
+
+        barChartInstance = new Chart(ctx, config);
+      }
+
+      // ==========================================
+      // 5. UTILITIES (Accordion)
+      // ==========================================
+      function toggleAccordion(id) {
+        const content = document.getElementById(id);
+        const icon = document.getElementById("icon-" + id);
+
+        if (content.classList.contains("hidden")) {
+          content.classList.remove("hidden");
+          content.classList.add("fade-in");
+          icon.innerHTML = "&#8722;"; // Minus symbol
+          icon.style.transform = "rotate(180deg)";
+        } else {
+          content.classList.add("hidden");
+          content.classList.remove("fade-in");
+          icon.innerHTML = "&#43;"; // Plus symbol
+          icon.style.transform = "rotate(0deg)";
+        }
+      }
+
+      // ==========================================
+      // INIT ON LOAD
+      // ==========================================
+      window.addEventListener("DOMContentLoaded", () => {
+        generatePillarButtons();
+        // Start on Tab 1
+        switchTab("tab-konsep");
+      });
+    </script>
+  </body>
+</html>

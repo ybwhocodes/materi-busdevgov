@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panduan Interaktif: Jenis-Jenis Business Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Chosen Palette: Warm Neutrals & Muted Forest (bg-stone-50, text-stone-800, accent emerald-700/amber-600) -->
+    <!-- Application Structure Plan: The SPA is structured as an interactive "Analytics Maturity Dashboard". It opens with a top-level summary, followed by an interactive Chart.js visualization of the "Analytics Maturity Curve" (Value vs. Difficulty). Users can click data points on the curve or navigation pills to dynamically update the detailed information panel below. This structure was chosen because it effectively visualizes the "hierarki nilai" mentioned in the report's conclusion, allowing users to linearly progress through the analytics stages or jump directly to areas of interest without leaving the page. -->
+    <!-- Visualization & Content Choices: Report Info: 4 Stages of Analytics -> Goal: Compare progression/value -> Viz Method: Line/Area Chart (Chart.js) -> Interaction: Clickable points updating detail state -> Justification: Shows relationship between difficulty and business value visually. Report Info: Details of each stage -> Goal: Inform -> Viz Method: Dynamic text cards, lists, and badge elements -> Interaction: Updates based on chart/nav click -> Justification: Organizes dense text into digestible, structured UI components. CONFIRMING NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #fafaf9;
+        color: #292524;
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 40vh;
+        max-height: 400px;
+      }
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 350px;
+        }
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.05),
+          0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      }
+      .transition-all-custom {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+      }
+    </style>
+  </head>
+  <body class="antialiased min-h-screen flex flex-col">
+    <header class="bg-stone-100 border-b border-stone-200 sticky top-0 z-50">
+      <div class="flex items-center">
+        <a href="https://ybwhocodes.github.io/materi-busdevgov/">
+          <img src="logo-busdev.png" alt="Logo Busdev" class="h-auto w-auto" />
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+      <section class="mb-12">
+        <div
+          class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-stone-200"
+        >
+          <h2 class="text-2xl font-semibold mb-4 text-emerald-800">
+            Tujuan Aplikasi
+          </h2>
+          <p class="text-stone-600 leading-relaxed text-lg">
+            Aplikasi interaktif ini dirancang untuk memandu Anda memahami empat
+            tahapan utama dalam
+            <strong class="text-stone-800">Business Analytics</strong>. Pada
+            bagian bawah, Anda akan menemukan grafik
+            <em>Analytics Maturity Curve</em> yang menggambarkan hierarki nilai
+            analitik—dari sekadar melihat data historis hingga mendapatkan
+            rekomendasi strategis otomatis. Silakan klik pada titik-titik di
+            grafik atau gunakan menu navigasi untuk mengeksplorasi secara detail
+            tujuan, <em>business insight</em>, contoh, dan metode dari setiap
+            jenis analitik yang ada pada Laporan Analitik Bisnis ini.
+          </p>
+        </div>
+      </section>
+
+      <section class="mb-10 text-center">
+        <h2 class="text-2xl font-bold text-stone-800 mb-2">
+          Kurva Kematangan Analitik (Analytics Maturity Curve)
+        </h2>
+        <p class="text-stone-500 mb-6 max-w-2xl mx-auto">
+          Visualisasi di bawah ini menunjukkan bagaimana setiap tahapan analitik
+          memberikan nilai bisnis yang semakin tinggi seiring dengan
+          meningkatnya kompleksitas metode yang digunakan.
+          <strong>Klik pada titik grafik untuk melihat detailnya.</strong>
+        </p>
+
+        <div
+          class="w-full bg-white p-4 rounded-2xl shadow-sm border border-stone-100"
+        >
+          <div class="chart-container">
+            <canvas id="maturityChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-8">
+        <div
+          class="flex flex-wrap justify-center gap-3"
+          id="nav-container"
+        ></div>
+      </section>
+
+      <section
+        id="detail-section"
+        class="glass-panel rounded-3xl p-6 md:p-10 mb-12 opacity-0 transform translate-y-4 transition-all-custom"
+      >
+        <div
+          class="border-b border-stone-200 pb-6 mb-8 text-center md:text-left"
+        >
+          <span
+            id="detail-badge"
+            class="inline-block px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider mb-3"
+          ></span>
+          <h2
+            id="detail-title"
+            class="text-3xl md:text-4xl font-bold text-stone-800 mb-2"
+          ></h2>
+          <p
+            id="detail-subtitle"
+            class="text-xl italic text-stone-500 font-serif"
+          ></p>
+        </div>
+
+        <div class="mb-8">
+          <p
+            id="detail-description"
+            class="text-lg text-stone-700 leading-relaxed bg-white/50 p-6 rounded-xl border border-stone-100"
+          ></p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div
+            class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100"
+          >
+            <div class="flex items-center mb-4">
+              <span class="text-2xl mr-3">&#128304;</span>
+              <h3 class="text-xl font-bold text-stone-800">Tujuan Utama</h3>
+            </div>
+            <ul
+              id="detail-goals"
+              class="space-y-3 text-stone-600 list-none pl-1"
+            ></ul>
+          </div>
+
+          <div
+            class="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100 relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 w-16 h-16 bg-emerald-50 rounded-bl-full -z-10"
+            ></div>
+            <div class="flex items-center mb-4">
+              <span class="text-2xl mr-3">&#128161;</span>
+              <h3 class="text-xl font-bold text-emerald-800">
+                Business Insight
+              </h3>
+            </div>
+            <ul
+              id="detail-insights"
+              class="space-y-4 text-stone-700 list-none pl-1"
+            ></ul>
+          </div>
+
+          <div
+            class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100"
+          >
+            <div class="flex items-center mb-4">
+              <span class="text-2xl mr-3">&#128188;</span>
+              <h3 class="text-xl font-bold text-stone-800">Contoh Penerapan</h3>
+            </div>
+            <div id="detail-examples" class="space-y-4"></div>
+          </div>
+
+          <div
+            class="bg-stone-50 rounded-2xl p-6 shadow-inner border border-stone-200"
+          >
+            <div class="flex items-center mb-4">
+              <span class="text-2xl mr-3">&#9881;</span>
+              <h3 class="text-xl font-bold text-stone-800">
+                Metode & Alat Umum
+              </h3>
+            </div>
+            <div id="detail-methods" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-8 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="mb-2 text-stone-400">
+          <strong>Kesimpulan Hirarki Nilai:</strong> Organisasi yang
+          mengintegrasikan keempat jenis analitik ini dapat mengambil keputusan
+          yang akurat dan berbasis data (data-driven).
+        </p>
+        <p class="text-sm opacity-70">
+          &copy; 2026 Business Intelligence Analytics Explorer
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const analyticsData = [
+        {
+          id: "descriptive",
+          title: "Descriptive Analytics",
+          subtitle: '"Apa yang telah terjadi?"',
+          color: "bg-stone-500",
+          textColor: "text-stone-700",
+          badgeColor: "bg-stone-100 text-stone-800",
+          chartColor: "#78716c",
+          description:
+            "Tahap awal dalam pemrosesan data yang bertujuan untuk menggambarkan situasi historis perusahaan. Fokus pada penyajian data yang relevan agar pemangku kepentingan memahami performa masa lalu.",
+          goals: [
+            "Memahami data historis untuk gambaran jelas keadaan bisnis masa lalu.",
+            "Menyusun laporan dan visualisasi (dashboard) untuk memantau metrik kinerja utama (KPI).",
+          ],
+          insights: [
+            "<strong>Identifikasi Tren:</strong> Mengetahui pola pertumbuhan atau penurunan secara periodik.",
+            "<strong>Baseline Performance:</strong> Menetapkan standar performa untuk membandingkan strategi baru dengan hasil masa lalu.",
+          ],
+          examples: [
+            {
+              title: "Laporan Penjualan Bulanan",
+              desc: "Menampilkan tren kenaikan atau penurunan pendapatan setiap bulan.",
+            },
+            {
+              title: "Analisis Kinerja Tahunan",
+              desc: "Evaluasi laba bersih, pengeluaran, dan margin keuntungan setahun penuh.",
+            },
+          ],
+          methods: [
+            "Data Aggregation",
+            "Dashboard Interaktif",
+            "Visualisasi Grafik",
+          ],
+        },
+        {
+          id: "diagnostic",
+          title: "Diagnostic Analytics",
+          subtitle: '"Mengapa hal itu terjadi?"',
+          color: "bg-amber-600",
+          textColor: "text-amber-800",
+          badgeColor: "bg-amber-100 text-amber-800",
+          chartColor: "#d97706",
+          description:
+            "Melakukan penggalian lebih dalam (drill-down) ke dalam data untuk menemukan akar penyebab masalah atau keberhasilan setelah mengetahui apa yang terjadi.",
+          goals: [
+            "Menemukan penyebab utama dari masalah atau peluang bisnis yang teridentifikasi.",
+            "Menganalisis faktor-faktor yang memengaruhi hasil tertentu untuk perbaikan operasional.",
+          ],
+          insights: [
+            "<strong>Hubungan Sebab-Akibat:</strong> Memahami variabel mana yang paling berkontribusi signifikan terhadap sebuah hasil.",
+            "<strong>Deteksi Anomali:</strong> Mengetahui alasan di balik lonjakan atau penurunan data yang tidak biasa.",
+          ],
+          examples: [
+            {
+              title: "Analisis Penurunan Penjualan",
+              desc: "Menyelidiki gangguan rantai pasok, kegagalan pemasaran, atau perubahan tren.",
+            },
+            {
+              title: "Analisis Musiman",
+              desc: "Menentukan apakah fluktuasi data merupakan pola berulang (misal: hari libur).",
+            },
+          ],
+          methods: [
+            "Root Cause Analysis (RCA)",
+            "5 Whys",
+            "Diagram Fishbone (Ishikawa)",
+          ],
+        },
+        {
+          id: "predictive",
+          title: "Predictive Analytics",
+          subtitle: '"Apa yang mungkin terjadi di masa depan?"',
+          color: "bg-teal-600",
+          textColor: "text-teal-800",
+          badgeColor: "bg-teal-100 text-teal-800",
+          chartColor: "#0d9488",
+          description:
+            "Menggunakan data historis digabungkan dengan algoritma statistik dan teknik pembelajaran mesin (Machine Learning) untuk memproyeksikan kemungkinan hasil di masa depan.",
+          goals: [
+            "Memprediksi tren atau perilaku masa depan berdasarkan pola data masa lalu.",
+            "Membantu mitigasi risiko dengan memahami kemungkinan skenario yang akan datang.",
+          ],
+          insights: [
+            "<strong>Antisipasi Perubahan Pasar:</strong> Bersiap menghadapi lonjakan permintaan/perubahan selera konsumen.",
+            "<strong>Profil Risiko:</strong> Memberikan gambaran potensi kegagalan sehingga tindakan pencegahan bisa diambil.",
+          ],
+          examples: [
+            {
+              title: "Ramalan Penjualan (Forecasting)",
+              desc: "Memprediksi volume penjualan bulan depan untuk mengatur stok inventaris.",
+            },
+            {
+              title: "Prediksi Churn Pelanggan",
+              desc: "Mengidentifikasi pelanggan yang mungkin berhenti berlangganan untuk tindakan retensi.",
+            },
+          ],
+          methods: [
+            "Model Statistik (Regresi, Time Series)",
+            "Machine Learning (Decision Trees)",
+            "Random Forest",
+            "Neural Networks",
+          ],
+        },
+        {
+          id: "prescriptive",
+          title: "Prescriptive Analytics",
+          subtitle: '"Apa yang harus kita lakukan?"',
+          color: "bg-emerald-700",
+          textColor: "text-emerald-900",
+          badgeColor: "bg-emerald-100 text-emerald-800",
+          chartColor: "#047857",
+          description:
+            "Tingkat analitik mutakhir yang tidak hanya memprediksi masa depan, tetapi juga memberikan rekomendasi tindakan spesifik untuk mencapai hasil optimal atau menghindari masalah.",
+          goals: [
+            "Menyediakan solusi terbaik atau rekomendasi strategis berdasarkan data.",
+            "Mengevaluasi berbagai alternatif solusi beserta dampaknya terhadap bisnis.",
+          ],
+          insights: [
+            "<strong>Optimasi Sumber Daya:</strong> Mengetahui cara mengalokasikan modal, waktu, dan tenaga kerja paling efisien.",
+            "<strong>Strategi Berbasis Skenario:</strong> Wawasan konsekuensi keputusan untuk mengurangi ketidakpastian jangka panjang.",
+          ],
+          examples: [
+            {
+              title: "Optimasi Harga (Dynamic Pricing)",
+              desc: "Rekomendasi harga terbaik secara real-time berdasarkan permintaan dan kompetitor.",
+            },
+            {
+              title: "Optimasi Rantai Pasok",
+              desc: "Menyarankan rute logistik tercepat atau pemilihan vendor dengan biaya terendah.",
+            },
+          ],
+          methods: [
+            "Optimasi Linear & Integer",
+            "Simulasi Monte Carlo",
+            "Algoritma Genetik",
+          ],
+        },
+      ];
+
+      let currentState = 0;
+      let maturityChartInstance = null;
+
+      function initApp() {
+        renderNav();
+        initChart();
+        updateContent(0);
+      }
+
+      function renderNav() {
+        const container = document.getElementById("nav-container");
+        container.innerHTML = "";
+
+        analyticsData.forEach((data, index) => {
+          const btn = document.createElement("button");
+          btn.className = `px-6 py-3 rounded-full font-semibold text-sm transition-all-custom border-2 ${
+            index === currentState
+              ? `${data.color} text-white border-transparent shadow-md scale-105`
+              : `bg-white text-stone-500 border-stone-200 hover:border-stone-400 hover:text-stone-800`
+          }`;
+          btn.innerText = data.title;
+          btn.onclick = () => handleStateChange(index);
+          container.appendChild(btn);
+        });
+      }
+
+      function initChart() {
+        const ctx = document.getElementById("maturityChart").getContext("2d");
+
+        const data = {
+          labels: ["Descriptive", "Diagnostic", "Predictive", "Prescriptive"],
+          datasets: [
+            {
+              label: "Business Value",
+              data: [20, 45, 75, 100],
+              borderColor: "#047857",
+              backgroundColor: "rgba(4, 120, 87, 0.1)",
+              borderWidth: 3,
+              pointBackgroundColor: analyticsData.map((d) => d.chartColor),
+              pointBorderColor: "#ffffff",
+              pointBorderWidth: 2,
+              pointRadius: 8,
+              pointHoverRadius: 12,
+              fill: true,
+              tension: 0.4,
+            },
+          ],
+        };
+
+        const config = {
+          type: "line",
+          data: data,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "rgba(28, 25, 23, 0.9)",
+                titleFont: { family: "Plus Jakarta Sans", size: 14 },
+                bodyFont: { family: "Plus Jakarta Sans", size: 13 },
+                padding: 12,
+                displayColors: false,
+                callbacks: {
+                  label: function (context) {
+                    const index = context.dataIndex;
+                    return analyticsData[index].subtitle;
+                  },
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 110,
+                title: {
+                  display: true,
+                  text: "Nilai Bisnis (Business Value)",
+                  font: { weight: "bold" },
+                },
+                grid: { color: "rgba(0,0,0,0.05)" },
+                ticks: { display: false },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: "Kompleksitas / Kesulitan (Difficulty)",
+                  font: { weight: "bold" },
+                },
+                grid: { display: false },
+              },
+            },
+            onClick: (event, elements) => {
+              if (elements.length > 0) {
+                const index = elements[0].index;
+                handleStateChange(index);
+              }
+            },
+            onHover: (event, chartElement) => {
+              event.native.target.style.cursor = chartElement[0]
+                ? "pointer"
+                : "default";
+            },
+          },
+        };
+
+        maturityChartInstance = new Chart(ctx, config);
+      }
+
+      function handleStateChange(index) {
+        if (currentState === index) return;
+        currentState = index;
+
+        renderNav();
+
+        const activeColors = analyticsData.map((d, i) =>
+          i === currentState ? d.chartColor : "#d6d3d1",
+        );
+        const activeRadii = analyticsData.map((d, i) =>
+          i === currentState ? 12 : 6,
+        );
+
+        maturityChartInstance.data.datasets[0].pointBackgroundColor =
+          activeColors;
+        maturityChartInstance.data.datasets[0].pointRadius = activeRadii;
+        maturityChartInstance.update();
+
+        updateContent(index);
+      }
+
+      function updateContent(index) {
+        const section = document.getElementById("detail-section");
+        const data = analyticsData[index];
+
+        section.classList.remove("opacity-100", "translate-y-0");
+        section.classList.add("opacity-0", "translate-y-4");
+
+        setTimeout(() => {
+          document.getElementById("detail-badge").className =
+            `inline-block px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider mb-3 ${data.badgeColor}`;
+          document.getElementById("detail-badge").innerText =
+            `Tahap ${index + 1}: ${data.title.split(" ")[0]}`;
+
+          document.getElementById("detail-title").innerText = data.title;
+          document.getElementById("detail-subtitle").innerText = data.subtitle;
+          document.getElementById("detail-description").innerText =
+            data.description;
+
+          const goalsContainer = document.getElementById("detail-goals");
+          goalsContainer.innerHTML = data.goals
+            .map(
+              (g) =>
+                `<li class="relative pl-6 before:content-['✓'] before:absolute before:left-0 before:text-emerald-600 before:font-bold">${g}</li>`,
+            )
+            .join("");
+
+          const insightsContainer = document.getElementById("detail-insights");
+          insightsContainer.innerHTML = data.insights
+            .map(
+              (i) =>
+                `<li class="bg-stone-50 p-3 rounded-lg border-l-4 border-emerald-500">${i}</li>`,
+            )
+            .join("");
+
+          const examplesContainer = document.getElementById("detail-examples");
+          examplesContainer.innerHTML = data.examples
+            .map(
+              (e) => `
+                    <div class="mb-3">
+                        <strong class="block text-stone-800">${e.title}</strong>
+                        <span class="text-stone-600 text-sm">${e.desc}</span>
+                    </div>
+                `,
+            )
+            .join("");
+
+          const methodsContainer = document.getElementById("detail-methods");
+          methodsContainer.innerHTML = data.methods
+            .map(
+              (m) => `
+                    <span class="inline-block bg-white border border-stone-200 text-stone-700 text-sm px-3 py-1.5 rounded-md shadow-sm font-medium">
+                        ${m}
+                    </span>
+                `,
+            )
+            .join("");
+
+          section.classList.remove("opacity-0", "translate-y-4");
+          section.classList.add("opacity-100", "translate-y-0");
+
+          if (window.scrollY < section.offsetTop - 100) {
+            section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        }, 300);
+      }
+
+      document.addEventListener("DOMContentLoaded", initApp);
+    </script>
+  </body>
+</html>

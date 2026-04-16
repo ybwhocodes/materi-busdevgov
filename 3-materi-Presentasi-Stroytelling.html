@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eksplorasi Strategi Presentasi & Storytelling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Chosen Palette: Warm Neutrals & Earth Tones (Stone 50, Stone 800, Amber 600, Teal 600, Rose 600) -->
+    <!-- Application Structure Plan: Dashboard layout with a sidebar for visualization/filtering and a main grid for content exploration. The Chart.js doughnut categorizes the 12 methods, acting as an interactive filter. Audience buttons provide quick access based on the report's recommendations. Clicking a method opens a detailed modal view. This allows users to explore by category, audience, or browse all methods efficiently, aligning with the goal of easy comprehension. -->
+    <!-- Visualization & Content Choices: 1. Doughnut Chart (Chart.js) -> Categorizes methods (Problem, Narrative, Action) to summarize the approaches -> Interactive filtering -> Helps users narrow down based on goal. 2. Audience Buttons (HTML/JS) -> Maps to the "Tips" section -> Filters content -> Quick access for specific scenarios. 3. Detail Cards & Modal (HTML/JS) -> Displays structure and examples dynamically. CONFIRMING NO SVG/MERMAID used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #fafaf9;
+        color: #292524;
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 320px;
+        max-height: 350px;
+      }
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 350px;
+        }
+      }
+      .method-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .method-card:hover {
+        transform: translateY(-4px);
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        border-color: #d6d3d1;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #fafaf9;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d6d3d1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a8a29e;
+      }
+      #modal-overlay {
+        backdrop-filter: blur(4px);
+      }
+      .category-dot {
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+      }
+    </style>
+  </head>
+  <body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+    <header
+      class="bg-white border-b border-stone-200 sticky top-0 z-10 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex justify-between items-center"
+      >
+        <div class="flex items-center">
+          <a href="https://ybwhocodes.github.io/materi-busdevgov/">
+            <img
+              src="logo-busdev.png"
+              alt="Logo Busdev"
+              class="h-auto w-auto"
+            />
+          </a>
+        </div>
+        <div class="hidden sm:block text-right">
+          <span
+            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-800"
+          >
+            12 Metode Analisis
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div
+        class="bg-amber-50 border-l-4 border-amber-500 p-5 mb-8 rounded-r-lg shadow-sm"
+      >
+        <h2 class="text-lg font-semibold text-amber-900 mb-2">
+          Mengapa Struktur Presentasi Penting?
+        </h2>
+        <p class="text-amber-800 text-sm leading-relaxed">
+          Dalam dunia profesional, kemampuan menyampaikan ide seringkali lebih
+          krusial daripada ide itu sendiri. Aplikasi interaktif ini merangkum 12
+          kerangka kerja storytelling yang dirancang untuk membangun koneksi,
+          mendapatkan kepercayaan, dan memicu aksi dari berbagai tipe pemangku
+          kepentingan. Gunakan panel di bawah untuk menjelajahi metode yang
+          paling sesuai dengan tujuan Anda.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <aside class="lg:col-span-4 flex flex-col gap-6">
+          <section
+            class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200"
+          >
+            <div class="mb-4">
+              <h3
+                class="text-lg font-bold text-stone-800 flex items-center gap-2"
+              >
+                <span>📊</span> Peta Kategori Metode
+              </h3>
+              <p class="text-xs text-stone-500 mt-1">
+                Grafik ini memvisualisasikan proporsi pendekatan presentasi.
+                Klik pada segmen grafik untuk menyaring daftar metode
+                berdasarkan pendekatan inti (Naratif, Masalah, atau Aksi).
+              </p>
+            </div>
+            <div class="chart-container">
+              <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="mt-4 flex justify-center">
+              <button
+                id="resetChartBtn"
+                class="hidden text-xs font-medium text-amber-600 hover:text-amber-800 bg-amber-50 px-3 py-1.5 rounded-full transition-colors"
+              >
+                ⟲ Tampilkan Semua Kategori
+              </button>
+            </div>
+          </section>
+
+          <section
+            class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200"
+          >
+            <div class="mb-4">
+              <h3
+                class="text-lg font-bold text-stone-800 flex items-center gap-2"
+              >
+                <span>👥</span> Filter Target Audiens
+              </h3>
+              <p class="text-xs text-stone-500 mt-1">
+                Pilih audiens target Anda. Filter ini secara otomatis menyoroti
+                metode yang paling direkomendasikan untuk tipe pemangku
+                kepentingan tertentu, memastikan pesan Anda tepat sasaran.
+              </p>
+            </div>
+            <div id="audience-filters" class="flex flex-wrap gap-2"></div>
+          </section>
+        </aside>
+
+        <section class="lg:col-span-8 flex flex-col h-full">
+          <div class="mb-4 flex justify-between items-end">
+            <div>
+              <h2 class="text-xl font-bold text-stone-800">
+                Eksplorasi Kerangka Kerja
+              </h2>
+              <p class="text-sm text-stone-500 mt-1" id="grid-status">
+                Menampilkan semua 12 metode.
+              </p>
+            </div>
+          </div>
+
+          <div
+            id="methods-grid"
+            class="grid grid-cols-1 md:grid-cols-2 gap-5 auto-rows-max"
+          ></div>
+
+          <div
+            id="no-results"
+            class="hidden flex-col items-center justify-center p-12 bg-stone-50 rounded-2xl border border-dashed border-stone-300 text-center"
+          >
+            <span class="text-4xl mb-3">🔍</span>
+            <h3 class="text-lg font-medium text-stone-700">
+              Tidak ada metode yang cocok
+            </h3>
+            <p class="text-stone-500 text-sm mt-1">
+              Coba sesuaikan filter kategori atau audiens Anda.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div
+      id="modal-overlay"
+      class="fixed inset-0 bg-stone-900/40 z-50 hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300"
+    >
+      <div
+        id="modal-content"
+        class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300 overflow-hidden"
+      >
+        <div
+          class="flex justify-between items-start p-6 border-b border-stone-100 bg-stone-50"
+        >
+          <div class="pr-8">
+            <div class="flex items-center gap-2 mb-2">
+              <span
+                id="modal-category"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+              ></span>
+              <span class="text-stone-400 text-sm">•</span>
+              <span
+                id="modal-inspiration"
+                class="text-xs font-medium text-stone-500 uppercase tracking-wider"
+              ></span>
+            </div>
+            <h2
+              id="modal-title"
+              class="text-2xl font-bold text-stone-900 leading-tight"
+            ></h2>
+          </div>
+          <button
+            id="close-modal"
+            class="text-stone-400 hover:text-stone-600 hover:bg-stone-200 p-2 rounded-full transition-colors focus:outline-none"
+          >
+            <span class="text-xl leading-none">✕</span>
+          </button>
+        </div>
+
+        <div class="p-6 overflow-y-auto custom-scrollbar flex-1 bg-white">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="md:col-span-1 space-y-6">
+              <div>
+                <h4
+                  class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2 flex items-center gap-1"
+                >
+                  <span>🎯</span> Tujuan Utama
+                </h4>
+                <p
+                  id="modal-usecase"
+                  class="text-sm text-stone-700 leading-relaxed"
+                ></p>
+              </div>
+              <div>
+                <h4
+                  class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2 flex items-center gap-1"
+                >
+                  <span>👥</span> Audiens Ideal
+                </h4>
+                <ul id="modal-audience" class="flex flex-wrap gap-2"></ul>
+              </div>
+            </div>
+
+            <div class="md:col-span-2 space-y-6">
+              <div class="bg-stone-50 rounded-xl p-5 border border-stone-100">
+                <h4
+                  class="text-sm font-bold text-stone-800 mb-3 flex items-center gap-2"
+                >
+                  <span>🏗️</span> Struktur Implementasi
+                </h4>
+                <div id="modal-structure" class="space-y-3"></div>
+              </div>
+
+              <div>
+                <h4
+                  class="text-sm font-bold text-stone-800 mb-3 flex items-center gap-2"
+                >
+                  <span>💬</span> Contoh Aplikasi Singkat
+                </h4>
+                <div
+                  class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg"
+                >
+                  <p
+                    id="modal-example"
+                    class="text-sm text-stone-800 italic leading-relaxed"
+                  ></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const reportData = [
+        {
+          id: 1,
+          name: "Metode AKSI",
+          fullName: "Awal Kondisi, Kendala, Struggle, Intisari",
+          inspiration: "Randy Pausch",
+          useCase:
+            "Cocok untuk presentasi motivasi, refleksi proyek, atau berbagi pengalaman personal yang memiliki nilai pembelajaran.",
+          category: "Naratif & Perjalanan",
+          audience: ["Umum/Publik"],
+          structure: [
+            { title: "Awal Kondisi", desc: "Gambaran situasi normal di awal." },
+            {
+              title: "Kendala",
+              desc: "Masalah yang muncul dan mengganggu stabilitas.",
+            },
+            {
+              title: "Struggle",
+              desc: "Upaya konkret dan kerja keras yang dilakukan.",
+            },
+            {
+              title: "Intisari",
+              desc: "Kebijaksanaan atau nilai utama yang dipetik.",
+            },
+          ],
+          example:
+            "Tahun pertama startup kami berjalan lancar (Awal), hingga regulasi baru mematikan sumber pendapatan utama (Kendala). Kami banting stir 180 derajat dan bekerja 16 jam sehari selama 6 bulan (Struggle). Dari sini kami paham bahwa fleksibilitas lebih berharga daripada modal besar (Intisari).",
+        },
+        {
+          id: 2,
+          name: "Before-After-Bridge (BAB)",
+          fullName: "Before-After-Bridge",
+          inspiration: "Dan S. Kennedy",
+          useCase:
+            "Sangat efektif untuk proposal solusi teknis, software, atau inisiatif efisiensi proses.",
+          category: "Berbasis Masalah",
+          audience: ["Eksekutif (C-Level)"],
+          structure: [
+            { title: "Before", desc: "Dunia yang penuh masalah saat ini." },
+            {
+              title: "After",
+              desc: "Dunia yang ideal setelah masalah selesai.",
+            },
+            {
+              title: "Bridge",
+              desc: "Bagaimana solusi Anda menjadi jembatan menuju dunia ideal tersebut.",
+            },
+          ],
+          example:
+            "Saat ini tim Anda menghabiskan 4 jam sehari hanya untuk input data manual (Before). Bayangkan jika waktu tersebut bisa digunakan untuk analisis strategis sementara data terisi otomatis (After). Perangkat lunak otomatisasi kami adalah cara untuk mencapainya (Bridge).",
+        },
+        {
+          id: 3,
+          name: "AIDA",
+          fullName: "Attention, Interest, Desire, Action",
+          inspiration: "Elias St. Elmo Lewis",
+          useCase:
+            "Standar emas dalam pemasaran dan pitching ide baru untuk mendapatkan persetujuan cepat.",
+          category: "Aksi & Persuasi",
+          audience: ["Umum/Publik"],
+          structure: [
+            {
+              title: "Attention",
+              desc: "Menarik perhatian dengan kalimat pembuka mengejutkan atau visual kuat.",
+            },
+            {
+              title: "Interest",
+              desc: "Menumbuhkan minat dengan fakta unik dan relevan.",
+            },
+            {
+              title: "Desire",
+              desc: "Membangkitkan keinginan untuk memiliki atau mencoba solusi.",
+            },
+            {
+              title: "Action",
+              desc: "Instruksi jelas tentang apa yang harus dilakukan audiens sekarang.",
+            },
+          ],
+          example:
+            "Apakah Anda ingin menghemat waktu dalam pekerjaan sehari-hari? Temukan bagaimana aplikasi kami bisa membantu Anda bekerja lebih cepat. Daftar sekarang dan dapatkan uji coba gratis selama 30 hari!",
+        },
+        {
+          id: 4,
+          name: "Star-Story-Solution",
+          fullName: "Star-Story-Solution",
+          inspiration: "Donald Miller",
+          useCase:
+            "Digunakan untuk membangun empati audiens yang kuat terhadap produk atau jasa.",
+          category: "Naratif & Perjalanan",
+          audience: ["Investor"],
+          structure: [
+            {
+              title: "Star",
+              desc: "Perkenalkan solusi atau karakter utama (bisa audiens/produk).",
+            },
+            {
+              title: "Story",
+              desc: "Ceritakan masalah atau tantangan dramatis yang dihadapi.",
+            },
+            {
+              title: "Solution",
+              desc: "Tunjukkan bagaimana solusi berhasil mengatasi masalah.",
+            },
+          ],
+          example:
+            "Setelah bekerja keras tanpa hasil, kami memperkenalkan platform baru yang memberikan hasil luar biasa dalam 3 bulan pertama, mengubah bisnis kami secara drastis.",
+        },
+        {
+          id: 5,
+          name: "Fogg Behavior Model",
+          fullName: "Motivation, Ability, Prompt",
+          inspiration: "BJ Fogg",
+          useCase:
+            "Mendorong perubahan perilaku audiens agar bertindak, misal berinvestasi atau mencoba alat baru.",
+          category: "Aksi & Persuasi",
+          audience: ["Umum/Publik"],
+          structure: [
+            {
+              title: "Motivation",
+              desc: "Tingkatkan motivasi audiens dengan menunjukkan keuntungan besar.",
+            },
+            {
+              title: "Ability",
+              desc: "Pastikan solusi atau langkah awal sangat mudah dilakukan.",
+            },
+            {
+              title: "Prompt",
+              desc: "Berikan pemicu atau panggilan untuk bertindak sekarang.",
+            },
+          ],
+          example:
+            "Daftar sekarang untuk webinar gratis dan pelajari cara mengoptimalkan proses Anda dalam hanya 10 menit sehari. Dengan tips yang sederhana, Anda bisa langsung mempraktikkannya.",
+        },
+        {
+          id: 6,
+          name: "The 3 Act Structure",
+          fullName: "Setup, Confrontation, Resolution",
+          inspiration: "Syd Field",
+          useCase:
+            "Presentasi panjang yang bersifat naratif komprehensif atau menceritakan perjalanan perusahaan.",
+          category: "Naratif & Perjalanan",
+          audience: ["Umum/Publik", "Tim Internal"],
+          structure: [
+            {
+              title: "Act 1 (Setup)",
+              desc: "Pengenalan karakter, dunia, dan situasi dasar.",
+            },
+            {
+              title: "Act 2 (Confrontation)",
+              desc: "Perkenalkan masalah atau konflik utama yang memuncak.",
+            },
+            {
+              title: "Act 3 (Resolution)",
+              desc: "Penyelesaian masalah dan dampaknya.",
+            },
+          ],
+          example:
+            "Di awal karier saya, saya berjuang untuk mendapatkan pengakuan. Konflik muncul ketika saya harus memilih antara pekerjaan dan passion saya. Akhirnya, saya memilih passion, yang membawa kesuksesan yang luar biasa.",
+        },
+        {
+          id: 7,
+          name: "Problem-Solution",
+          fullName: "Problem-Solution",
+          inspiration: "Kerangka Umum",
+          useCase:
+            "Presentasi bisnis standar yang bersifat to-the-point dan lugas.",
+          category: "Berbasis Masalah",
+          audience: ["Eksekutif (C-Level)", "Tim Internal"],
+          structure: [
+            {
+              title: "Problem",
+              desc: "Jelaskan masalah (pain points) yang dihadapi audiens.",
+            },
+            {
+              title: "Solution",
+              desc: "Tawarkan solusi yang efektif, aplikatif, dan logis.",
+            },
+          ],
+          example:
+            "Jika Anda merasa tim Anda kekurangan koordinasi, menggunakan alat manajemen proyek kami akan mengurangi kebingungannya, meningkatkan efisiensi kerja.",
+        },
+        {
+          id: 8,
+          name: "Metode PAS",
+          fullName: "Problem, Agitate, Solution",
+          inspiration: "Dan S. Kennedy",
+          useCase:
+            "Fokus mengidentifikasi masalah dan memperbesar dampaknya. Sangat cocok untuk isu kritis yang sering diabaikan.",
+          category: "Berbasis Masalah",
+          audience: ["Investor"],
+          structure: [
+            {
+              title: "Problem",
+              desc: "Perkenalkan masalah utama yang dihadapi.",
+            },
+            {
+              title: "Agitate",
+              desc: "Perburuk masalah tersebut dengan menunjukkan dampak negatifnya jika didiamkan.",
+            },
+            {
+              title: "Solution",
+              desc: "Berikan solusi sebagai penyelamat yang tepat waktu.",
+            },
+          ],
+          example:
+            "Jika Anda terus bekerja dengan alat yang tidak efisien, waktu Anda akan terus terbuang sia-sia (Agitate). Kami punya solusi untuk mempercepat pekerjaan Anda, tanpa stres.",
+        },
+        {
+          id: 9,
+          name: "Chronological Order",
+          fullName: "Pendekatan Urutan Waktu",
+          inspiration: "Kerangka Umum",
+          useCase:
+            "Sangat cocok untuk laporan progres, dokumentasi sejarah perusahaan, atau rencana jangka panjang (roadmap).",
+          category: "Naratif & Perjalanan",
+          audience: ["Tim Internal"],
+          structure: [
+            {
+              title: "Masa Lalu",
+              desc: "Awal mula kejadian atau latar belakang masalah.",
+            },
+            {
+              title: "Masa Kini",
+              desc: "Status, tindakan, atau pencapaian saat ini.",
+            },
+            {
+              title: "Masa Depan",
+              desc: "Proyeksi, rencana, atau hasil yang diharapkan.",
+            },
+          ],
+          example:
+            "Pada tahun 2000, perusahaan kami dimulai dengan hanya dua orang. Sejak itu, kami berkembang pesat, membuka kantor di lima kota besar.",
+        },
+        {
+          id: 10,
+          name: "Cause and Effect",
+          fullName: "Sebab dan Akibat",
+          inspiration: "Kerangka Umum",
+          useCase:
+            "Digunakan untuk analisis bisnis, laporan audit, atau proposal strategis berbasis data.",
+          category: "Berbasis Masalah",
+          audience: ["Tim Internal"],
+          structure: [
+            {
+              title: "Cause",
+              desc: "Jelaskan secara rasional penyebab suatu peristiwa atau kendala.",
+            },
+            {
+              title: "Effect",
+              desc: "Tunjukkan akibat komprehensif yang ditimbulkan dari penyebab tersebut.",
+            },
+          ],
+          example:
+            "Karena penggunaan teknologi yang efisien, tim kami mampu meningkatkan produktivitas hingga 40% dalam tiga bulan.",
+        },
+        {
+          id: 11,
+          name: "Metode SOCIAL",
+          fullName: "Story, Observation, Connection, Insight, Agenda, Lesson",
+          inspiration: "Ferry Irwandi",
+          useCase:
+            "Ideal untuk video esai, pidato kepemimpinan, atau presentasi yang ingin memberikan dampak pemikiran mendalam.",
+          category: "Naratif & Perjalanan",
+          audience: ["Umum/Publik"],
+          structure: [
+            {
+              title: "Story/Situasi",
+              desc: "Mulai dengan cerita atau situasi yang relevan.",
+            },
+            {
+              title: "Observasi",
+              desc: "Amati dan jelaskan masalah yang dihadapi.",
+            },
+            {
+              title: "Connection",
+              desc: "Hubungkan masalah dengan realitas audiens.",
+            },
+            {
+              title: "Insight",
+              desc: "Berikan wawasan baru atau perspektif unik.",
+            },
+            { title: "Agenda", desc: "Tentukan tujuan atau langkah-langkah." },
+            {
+              title: "Lesson/Impact",
+              desc: "Berikan pelajaran berharga yang dapat diterapkan.",
+            },
+          ],
+          example:
+            "Pernahkah Anda merasa sulit mengatur waktu? Saya juga mengalaminya. Namun, setelah saya mengatur prioritas dengan lebih jelas, saya bisa mengelola waktu dengan lebih efisien.",
+        },
+        {
+          id: 12,
+          name: "Metode FAPSI",
+          fullName: "Fact, Problem, Solution, Impact",
+          inspiration: "R. Billiyan Mulkan G.",
+          useCase:
+            "Presentasi berbasis bukti (evidence-based) seperti proposal riset eksekutif atau pengembangan bisnis data-driven.",
+          category: "Berbasis Masalah",
+          audience: ["Eksekutif (C-Level)"],
+          structure: [
+            {
+              title: "Fact",
+              desc: "Sajikan fakta atau data mentah yang tak terbantahkan.",
+            },
+            {
+              title: "Problem",
+              desc: "Turunkan secara logis masalah yang timbul dari fakta tersebut.",
+            },
+            {
+              title: "Solution",
+              desc: "Tawarkan rekomendasi tindakan yang mengatasi masalah.",
+            },
+            {
+              title: "Impact",
+              desc: "Jelaskan proyeksi dampak positif (ROI/Efisiensi).",
+            },
+          ],
+          example:
+            "Fakta menunjukkan bahwa 70% tim bisnis menghabiskan waktu untuk tugas administratif. Masalah ini menyebabkan penurunan produktivitas. Solusinya adalah menggunakan perangkat lunak otomatisasi, yang meningkatkan efisiensi tim sebesar 50%.",
+        },
+      ];
+
+      const CATEGORIES = {
+        "Berbasis Masalah": {
+          color: "#0d9488",
+          bg: "bg-teal-50",
+          text: "text-teal-700",
+          border: "border-teal-200",
+        },
+        "Naratif & Perjalanan": {
+          color: "#d97706",
+          bg: "bg-amber-50",
+          text: "text-amber-700",
+          border: "border-amber-200",
+        },
+        "Aksi & Persuasi": {
+          color: "#e11d48",
+          bg: "bg-rose-50",
+          text: "text-rose-700",
+          border: "border-rose-200",
+        },
+      };
+
+      const AUDIENCES = [
+        "Semua",
+        "Eksekutif (C-Level)",
+        "Tim Internal",
+        "Investor",
+        "Umum/Publik",
+      ];
+
+      let state = {
+        categoryFilter: null,
+        audienceFilter: "Semua",
+        chartInstance: null,
+      };
+
+      function init() {
+        renderChart();
+        renderAudienceButtons();
+        renderGrid();
+        setupModalListeners();
+      }
+
+      function renderChart() {
+        const ctx = document.getElementById("categoryChart").getContext("2d");
+        const labels = Object.keys(CATEGORIES);
+        const dataCounts = labels.map(
+          (label) =>
+            reportData.filter((item) => item.category === label).length,
+        );
+        const bgColors = labels.map((label) => CATEGORIES[label].color);
+
+        state.chartInstance = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: dataCounts,
+                backgroundColor: bgColors,
+                borderWidth: 2,
+                borderColor: "#ffffff",
+                hoverOffset: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: "65%",
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  padding: 20,
+                  font: { family: "'Inter', sans-serif", size: 12 },
+                  color: "#57534e",
+                  usePointStyle: true,
+                  pointStyle: "circle",
+                },
+              },
+              tooltip: {
+                backgroundColor: "#292524",
+                padding: 12,
+                titleFont: { family: "'Inter', sans-serif", size: 13 },
+                bodyFont: { family: "'Inter', sans-serif", size: 13 },
+                callbacks: {
+                  label: function (context) {
+                    return ` ${context.label}: ${context.raw} Metode`;
+                  },
+                },
+              },
+            },
+            onClick: (event, elements) => {
+              if (elements.length > 0) {
+                const index = elements[0].index;
+                const clickedCategory = labels[index];
+
+                if (state.categoryFilter === clickedCategory) {
+                  state.categoryFilter = null;
+                } else {
+                  state.categoryFilter = clickedCategory;
+                }
+                state.audienceFilter = "Semua";
+                updateUI();
+              }
+            },
+          },
+        });
+
+        document
+          .getElementById("resetChartBtn")
+          .addEventListener("click", () => {
+            state.categoryFilter = null;
+            updateUI();
+          });
+      }
+
+      function renderAudienceButtons() {
+        const container = document.getElementById("audience-filters");
+        container.innerHTML = "";
+
+        AUDIENCES.forEach((audience) => {
+          const btn = document.createElement("button");
+          const isActive = state.audienceFilter === audience;
+
+          btn.className = `px-4 py-2 text-sm font-medium rounded-full transition-colors border ${isActive ? "bg-stone-800 text-white border-stone-800 shadow-md" : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50 hover:border-stone-300"}`;
+          btn.textContent = audience;
+
+          btn.onclick = () => {
+            state.audienceFilter = audience;
+            state.categoryFilter = null;
+            updateUI();
+          };
+          container.appendChild(btn);
+        });
+      }
+
+      function getFilteredData() {
+        return reportData.filter((item) => {
+          const matchCategory = state.categoryFilter
+            ? item.category === state.categoryFilter
+            : true;
+          const matchAudience =
+            state.audienceFilter === "Semua"
+              ? true
+              : item.audience.includes(state.audienceFilter);
+          return matchCategory && matchAudience;
+        });
+      }
+
+      function updateUI() {
+        renderAudienceButtons();
+        renderGrid();
+
+        const resetBtn = document.getElementById("resetChartBtn");
+        if (state.categoryFilter) {
+          resetBtn.classList.remove("hidden");
+        } else {
+          resetBtn.classList.add("hidden");
+        }
+
+        let statusText = "Menampilkan semua 12 metode.";
+        if (state.categoryFilter && state.audienceFilter !== "Semua") {
+          statusText = `Filter: ${state.categoryFilter} & ${state.audienceFilter}`;
+        } else if (state.categoryFilter) {
+          statusText = `Filter Kategori: ${state.categoryFilter}`;
+        } else if (state.audienceFilter !== "Semua") {
+          statusText = `Filter Audiens: ${state.audienceFilter}`;
+        }
+        document.getElementById("grid-status").textContent = statusText;
+      }
+
+      function renderGrid() {
+        const grid = document.getElementById("methods-grid");
+        const noResults = document.getElementById("no-results");
+        const filteredData = getFilteredData();
+
+        grid.innerHTML = "";
+
+        if (filteredData.length === 0) {
+          grid.classList.add("hidden");
+          noResults.classList.remove("hidden");
+          noResults.classList.add("flex");
+        } else {
+          grid.classList.remove("hidden");
+          noResults.classList.add("hidden");
+          noResults.classList.remove("flex");
+
+          filteredData.forEach((item) => {
+            const styleOpts = CATEGORIES[item.category];
+            const card = document.createElement("div");
+            card.className = `method-card bg-white border border-stone-200 rounded-2xl p-5 cursor-pointer flex flex-col h-full relative overflow-hidden`;
+            card.onclick = () => openModal(item);
+
+            const audienceTags = item.audience
+              .map(
+                (aud) =>
+                  `<span class="inline-block text-[10px] font-semibold tracking-wide text-stone-500 uppercase bg-stone-100 px-2 py-1 rounded mb-2 mr-1">${aud}</span>`,
+              )
+              .join("");
+
+            card.innerHTML = `
+                        <div class="absolute top-0 left-0 w-1 h-full" style="background-color: ${styleOpts.color}"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>${audienceTags}</div>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium ${styleOpts.bg} ${styleOpts.text} border ${styleOpts.border}">
+                                    <span class="category-dot" style="background-color: ${styleOpts.color}"></span>
+                                    ${item.category}
+                                </span>
+                            </div>
+                            <h3 class="text-lg font-bold text-stone-800 mb-1 leading-tight">${item.name}</h3>
+                            <p class="text-xs font-medium text-stone-500 mb-3 flex items-center gap-1"><span>💡</span> Inspirasi: ${item.inspiration}</p>
+                            <p class="text-sm text-stone-600 line-clamp-2 leading-relaxed">${item.useCase}</p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-stone-100 flex justify-between items-center">
+                            <span class="text-xs font-semibold text-stone-500">${item.structure.length} Langkah</span>
+                            <span class="text-amber-600 text-sm font-medium group-hover:underline flex items-center gap-1">Detail <span>→</span></span>
+                        </div>
+                    `;
+            grid.appendChild(card);
+          });
+        }
+      }
+
+      function openModal(item) {
+        const overlay = document.getElementById("modal-overlay");
+        const content = document.getElementById("modal-content");
+        const styleOpts = CATEGORIES[item.category];
+
+        document.getElementById("modal-title").textContent =
+          item.fullName || item.name;
+        document.getElementById("modal-category").textContent = item.category;
+        document.getElementById("modal-category").className =
+          `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styleOpts.bg} ${styleOpts.text} border ${styleOpts.border}`;
+        document.getElementById("modal-inspiration").textContent =
+          `INSPIRASI: ${item.inspiration}`;
+
+        document.getElementById("modal-usecase").textContent = item.useCase;
+
+        const audContainer = document.getElementById("modal-audience");
+        audContainer.innerHTML = item.audience
+          .map(
+            (aud) =>
+              `<span class="px-2.5 py-1 rounded bg-stone-100 text-stone-600 text-xs font-semibold border border-stone-200">${aud}</span>`,
+          )
+          .join("");
+
+        const structContainer = document.getElementById("modal-structure");
+        structContainer.innerHTML = item.structure
+          .map(
+            (step, idx) => `
+                <div class="flex gap-3 items-start bg-white p-3 rounded-lg border border-stone-100 shadow-sm">
+                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-stone-800 text-white flex items-center justify-center text-xs font-bold mt-0.5">${idx + 1}</div>
+                    <div>
+                        <span class="font-bold text-sm text-stone-800 block">${step.title}</span>
+                        <span class="text-sm text-stone-600 leading-snug">${step.desc}</span>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+
+        document.getElementById("modal-example").textContent =
+          `"${item.example}"`;
+
+        overlay.classList.remove("hidden");
+        setTimeout(() => {
+          overlay.classList.remove("opacity-0");
+          content.classList.remove("scale-95");
+        }, 10);
+
+        document.body.style.overflow = "hidden";
+      }
+
+      function setupModalListeners() {
+        const overlay = document.getElementById("modal-overlay");
+        const content = document.getElementById("modal-content");
+        const closeBtn = document.getElementById("close-modal");
+
+        const closeModal = () => {
+          overlay.classList.add("opacity-0");
+          content.classList.add("scale-95");
+          setTimeout(() => {
+            overlay.classList.add("hidden");
+            document.body.style.overflow = "auto";
+          }, 300);
+        };
+
+        closeBtn.addEventListener("click", closeModal);
+        overlay.addEventListener("click", (e) => {
+          if (e.target === overlay) closeModal();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !overlay.classList.contains("hidden"))
+            closeModal();
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>

@@ -1,65 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BPI Guide: Navigasi Atas Interaktif</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Configuration for Tailwind & Custom CSS -->
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            700: '#0f766e',
-                            900: '#134e4a',
-                        },
-                        accent: {
-                            500: '#f59e0b',
-                            600: '#d97706',
-                        }
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Inter", "sans-serif"] },
+            colors: {
+              brand: {
+                50: "#f0fdfa",
+                100: "#ccfbf1",
+                500: "#14b8a6",
+                600: "#0d9488",
+                700: "#0f766e",
+                900: "#134e4a",
+              },
+              accent: {
+                500: "#f59e0b",
+                600: "#d97706",
+              },
+            },
+          },
+        },
+      };
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fafaf9; color: #1c1917; }
-        
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #fafaf9;
+        color: #1c1917;
+      }
+
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 300px;
+        max-height: 350px;
+      }
+      @media (min-width: 768px) {
         .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 350px;
+          height: 350px;
+          max-height: 400px;
         }
-        @media (min-width: 768px) {
-            .chart-container { height: 350px; max-height: 400px; }
-        }
+      }
 
-        .nav-active { color: #0d9488; font-weight: 700; border-bottom: 2px solid #0d9488; }
-        
-        .icon-unicode { font-size: 1.25rem; line-height: 1; display: inline-block; }
+      .nav-active {
+        color: #0d9488;
+        font-weight: 700;
+        border-bottom: 2px solid #0d9488;
+      }
 
-        /* Smooth tab transition for steps */
-        .step-transition { transition: all 0.3s ease-in-out; }
+      .icon-unicode {
+        font-size: 1.25rem;
+        line-height: 1;
+        display: inline-block;
+      }
+
+      /* Smooth tab transition for steps */
+      .step-transition {
+        transition: all 0.3s ease-in-out;
+      }
     </style>
 
     <!-- Chosen Palette: Harmony of Stone-50 (Background), Teal-600 (Main Action), and Slate-800 (Typography) -->
@@ -71,423 +91,804 @@
          4. Prioritization -> Bubble Chart (Chart.js) to map Impact vs Effort.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-</head>
-<body class="bg-stone-50">
-
+  </head>
+  <body class="bg-stone-50">
     <!-- TOP NAVBAR -->
-    <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-stone-200 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">📘</span>
-                    <span class="font-bold text-xl text-stone-900 tracking-tight">Business Process </span>
-                    <span class="text-brand-600">Improvement</span></span>
-                </div>
+    <header
+      class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-stone-200 z-50"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <div class="flex items-center">
+            <a href="https://ybwhocodes.github.io/materi-busdevgov/">
+              <img
+                src="logo-busdev.png"
+                alt="Logo Busdev"
+                class="h-auto w-auto"
+              />
+            </a>
+          </div>
 
-                <!-- Desktop Menu -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="#intro" class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all" data-target="intro">Intro</a>
-                    <a href="#mindset" class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all" data-target="mindset">Mindset</a>
-                    <a href="#trigger" class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all" data-target="trigger">Pemicu</a>
-                    <a href="#steps" class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all" data-target="steps">10 Langkah</a>
-                    <a href="#tools" class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all" data-target="tools">Alat</a>
-                    <a href="#rules" class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all" data-target="rules">Aturan</a>
-                </nav>
+          <!-- Desktop Menu -->
+          <nav class="hidden md:flex space-x-8">
+            <a
+              href="#intro"
+              class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all"
+              data-target="intro"
+              >Intro</a
+            >
+            <a
+              href="#mindset"
+              class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all"
+              data-target="mindset"
+              >Mindset</a
+            >
+            <a
+              href="#trigger"
+              class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all"
+              data-target="trigger"
+              >Pemicu</a
+            >
+            <a
+              href="#steps"
+              class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all"
+              data-target="steps"
+              >10 Langkah</a
+            >
+            <a
+              href="#tools"
+              class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all"
+              data-target="tools"
+              >Alat</a
+            >
+            <a
+              href="#rules"
+              class="nav-link text-sm font-medium text-stone-600 hover:text-brand-600 py-5 transition-all"
+              data-target="rules"
+              >Aturan</a
+            >
+          </nav>
 
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="mobileMenuBtn" class="text-stone-600 p-2 focus:outline-none">
-                        <span class="icon-unicode" id="menuIcon">&#9776;</span>
-                    </button>
-                </div>
-            </div>
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden">
+            <button
+              id="mobileMenuBtn"
+              class="text-stone-600 p-2 focus:outline-none"
+            >
+              <span class="icon-unicode" id="menuIcon">&#9776;</span>
+            </button>
+          </div>
         </div>
+      </div>
 
-        <!-- Mobile Navigation Drawer -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-stone-200 animate-in slide-in-from-top duration-300">
-            <div class="px-4 pt-2 pb-6 space-y-1">
-                <a href="#intro" class="nav-link block px-3 py-3 text-base font-medium text-stone-600" data-target="intro">Intro</a>
-                <a href="#mindset" class="nav-link block px-3 py-3 text-base font-medium text-stone-600" data-target="mindset">Mindset</a>
-                <a href="#trigger" class="nav-link block px-3 py-3 text-base font-medium text-stone-600" data-target="trigger">Pemicu</a>
-                <a href="#steps" class="nav-link block px-3 py-3 text-base font-medium text-stone-600" data-target="steps">10 Langkah</a>
-                <a href="#tools" class="nav-link block px-3 py-3 text-base font-medium text-stone-600" data-target="tools">Alat</a>
-                <a href="#rules" class="nav-link block px-3 py-3 text-base font-medium text-stone-600" data-target="rules">Aturan</a>
-            </div>
+      <!-- Mobile Navigation Drawer -->
+      <div
+        id="mobileMenu"
+        class="hidden md:hidden bg-white border-b border-stone-200 animate-in slide-in-from-top duration-300"
+      >
+        <div class="px-4 pt-2 pb-6 space-y-1">
+          <a
+            href="#intro"
+            class="nav-link block px-3 py-3 text-base font-medium text-stone-600"
+            data-target="intro"
+            >Intro</a
+          >
+          <a
+            href="#mindset"
+            class="nav-link block px-3 py-3 text-base font-medium text-stone-600"
+            data-target="mindset"
+            >Mindset</a
+          >
+          <a
+            href="#trigger"
+            class="nav-link block px-3 py-3 text-base font-medium text-stone-600"
+            data-target="trigger"
+            >Pemicu</a
+          >
+          <a
+            href="#steps"
+            class="nav-link block px-3 py-3 text-base font-medium text-stone-600"
+            data-target="steps"
+            >10 Langkah</a
+          >
+          <a
+            href="#tools"
+            class="nav-link block px-3 py-3 text-base font-medium text-stone-600"
+            data-target="tools"
+            >Alat</a
+          >
+          <a
+            href="#rules"
+            class="nav-link block px-3 py-3 text-base font-medium text-stone-600"
+            data-target="rules"
+            >Aturan</a
+          >
         </div>
+      </div>
     </header>
 
     <!-- MAIN CONTENT -->
     <main class="pt-16">
-        
-        <!-- SECTION: INTRO -->
-        <section id="intro" class="content-section min-h-[90vh] flex items-center px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <div class="inline-flex items-center px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold mb-6 border border-brand-100">
-                    <span class="mr-2">🚀</span> BUSINESS PROCESS IMPROVEMENT
+      <!-- SECTION: INTRO -->
+      <section
+        id="intro"
+        class="content-section min-h-[90vh] flex items-center px-4"
+      >
+        <div class="max-w-4xl mx-auto text-center">
+          <div
+            class="inline-flex items-center px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold mb-6 border border-brand-100"
+          >
+            <span class="mr-2">🚀</span> BUSINESS PROCESS IMPROVEMENT
+          </div>
+          <h1
+            class="text-4xl md:text-6xl font-extrabold text-stone-900 mb-6 leading-tight"
+          >
+            Optimalkan Proses,
+            <span class="text-brand-600">Maksimalkan Hasil.</span>
+          </h1>
+          <p
+            class="text-lg md:text-xl text-stone-600 mb-10 leading-relaxed max-w-2xl mx-auto"
+          >
+            Panduan praktis digital untuk membantu tim Anda mengidentifikasi
+            hambatan, memetakan solusi, dan mengeksekusi perbaikan proses kerja
+            secara terukur.
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button
+              onclick="scrollToSection('mindset')"
+              class="bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-brand-200"
+            >
+              Pelajari Mindset Dasar
+            </button>
+            <button
+              onclick="scrollToSection('trigger')"
+              class="bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 px-8 py-4 rounded-xl font-semibold transition-all"
+            >
+              Cek Kondisi Tim Saya
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: MINDSET -->
+      <section id="mindset" class="content-section py-20 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-stone-900">
+              Mindset & Pilar Utama
+            </h2>
+            <p class="text-stone-500 mt-2 italic">
+              "Masalah bisnis seringkali adalah masalah proses yang
+              tersembunyi."
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+              <div
+                class="flex gap-4 p-6 bg-stone-50 rounded-2xl border border-stone-100"
+              >
+                <div class="text-3xl">🧩</div>
+                <div>
+                  <h4 class="font-bold text-stone-900 text-lg">
+                    Process Thinking
+                  </h4>
+                  <p class="text-stone-600 text-sm mt-1">
+                    Melihat setiap pekerjaan sebagai mata rantai aktivitas. Jika
+                    output buruk, periksa rantainya, bukan hanya orang di
+                    ujungnya.
+                  </p>
                 </div>
-                <h1 class="text-4xl md:text-6xl font-extrabold text-stone-900 mb-6 leading-tight">Optimalkan Proses, <span class="text-brand-600">Maksimalkan Hasil.</span></h1>
-                <p class="text-lg md:text-xl text-stone-600 mb-10 leading-relaxed max-w-2xl mx-auto">
-                    Panduan praktis digital untuk membantu tim Anda mengidentifikasi hambatan, memetakan solusi, dan mengeksekusi perbaikan proses kerja secara terukur.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <button onclick="scrollToSection('mindset')" class="bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-brand-200">Pelajari Mindset Dasar</button>
-                    <button onclick="scrollToSection('trigger')" class="bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 px-8 py-4 rounded-xl font-semibold transition-all">Cek Kondisi Tim Saya</button>
+              </div>
+              <div
+                class="flex gap-4 p-6 bg-stone-50 rounded-2xl border border-stone-100"
+              >
+                <div class="text-3xl">📈</div>
+                <div>
+                  <h4 class="font-bold text-stone-900 text-lg">
+                    Keunggulan Operasional
+                  </h4>
+                  <p class="text-stone-600 text-sm mt-1">
+                    Proses yang baik menciptakan efisiensi biaya, kecepatan
+                    layanan, dan konsistensi kualitas tanpa bergantung pada
+                    individu tertentu.
+                  </p>
                 </div>
+              </div>
+              <div class="p-6 bg-brand-50 rounded-2xl border border-brand-100">
+                <h4 class="font-bold text-brand-800 mb-4 flex items-center">
+                  <span class="mr-2">💡</span> 3 Pilar BPI
+                </h4>
+                <ul class="space-y-3 text-sm text-brand-900">
+                  <li class="flex justify-between">
+                    <strong>Effectiveness:</strong>
+                    <span>Memenuhi target user</span>
+                  </li>
+                  <li
+                    class="flex justify-between border-t border-brand-100 pt-3"
+                  >
+                    <strong>Efficiency:</strong>
+                    <span>Hemat waktu & biaya</span>
+                  </li>
+                  <li
+                    class="flex justify-between border-t border-brand-100 pt-3"
+                  >
+                    <strong>Adaptability:</strong>
+                    <span>Lentur terhadap perubahan</span>
+                  </li>
+                </ul>
+              </div>
             </div>
-        </section>
 
-        <!-- SECTION: MINDSET -->
-        <section id="mindset" class="content-section py-20 px-4 bg-white">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold text-stone-900">Mindset & Pilar Utama</h2>
-                    <p class="text-stone-500 mt-2 italic">"Masalah bisnis seringkali adalah masalah proses yang tersembunyi."</p>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div class="space-y-8">
-                        <div class="flex gap-4 p-6 bg-stone-50 rounded-2xl border border-stone-100">
-                            <div class="text-3xl">🧩</div>
-                            <div>
-                                <h4 class="font-bold text-stone-900 text-lg">Process Thinking</h4>
-                                <p class="text-stone-600 text-sm mt-1">Melihat setiap pekerjaan sebagai mata rantai aktivitas. Jika output buruk, periksa rantainya, bukan hanya orang di ujungnya.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 p-6 bg-stone-50 rounded-2xl border border-stone-100">
-                            <div class="text-3xl">📈</div>
-                            <div>
-                                <h4 class="font-bold text-stone-900 text-lg">Keunggulan Operasional</h4>
-                                <p class="text-stone-600 text-sm mt-1">Proses yang baik menciptakan efisiensi biaya, kecepatan layanan, dan konsistensi kualitas tanpa bergantung pada individu tertentu.</p>
-                            </div>
-                        </div>
-                        <div class="p-6 bg-brand-50 rounded-2xl border border-brand-100">
-                            <h4 class="font-bold text-brand-800 mb-4 flex items-center"><span class="mr-2">💡</span> 3 Pilar BPI</h4>
-                            <ul class="space-y-3 text-sm text-brand-900">
-                                <li class="flex justify-between"><strong>Effectiveness:</strong> <span>Memenuhi target user</span></li>
-                                <li class="flex justify-between border-t border-brand-100 pt-3"><strong>Efficiency:</strong> <span>Hemat waktu & biaya</span></li>
-                                <li class="flex justify-between border-t border-brand-100 pt-3"><strong>Adaptability:</strong> <span>Lentur terhadap perubahan</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-stone-50 p-8 rounded-3xl border border-stone-100">
-                        <h4 class="text-center font-bold text-stone-700 mb-6">Visualisasi Keseimbangan Pilar</h4>
-                        <div class="chart-container">
-                            <canvas id="pillarRadar"></canvas>
-                        </div>
-                    </div>
-                </div>
+            <div class="bg-stone-50 p-8 rounded-3xl border border-stone-100">
+              <h4 class="text-center font-bold text-stone-700 mb-6">
+                Visualisasi Keseimbangan Pilar
+              </h4>
+              <div class="chart-container">
+                <canvas id="pillarRadar"></canvas>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <!-- SECTION: TRIGGER -->
-        <section id="trigger" class="content-section py-20 px-4">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-stone-900">Kapan Harus Melakukan BPI?</h2>
-                    <p class="text-stone-600 mt-2">Gunakan kuis cepat ini sebagai pemicu awal perbaikan.</p>
+      <!-- SECTION: TRIGGER -->
+      <section id="trigger" class="content-section py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-stone-900">
+              Kapan Harus Melakukan BPI?
+            </h2>
+            <p class="text-stone-600 mt-2">
+              Gunakan kuis cepat ini sebagai pemicu awal perbaikan.
+            </p>
+          </div>
+
+          <div
+            class="bg-white rounded-3xl shadow-xl shadow-stone-200/50 border border-stone-200 overflow-hidden"
+          >
+            <div class="p-8 space-y-4">
+              <p
+                class="text-sm font-semibold text-stone-400 uppercase tracking-wider mb-4"
+              >
+                Pilih yang terjadi pada tim Anda:
+              </p>
+
+              <label
+                class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group"
+              >
+                <input
+                  type="checkbox"
+                  class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500"
+                />
+                <span
+                  class="ml-4 text-stone-700 font-medium group-hover:text-stone-900"
+                  >Banyak komplain dari user atau pelanggan</span
+                >
+              </label>
+
+              <label
+                class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group"
+              >
+                <input
+                  type="checkbox"
+                  class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500"
+                />
+                <div class="ml-4">
+                  <span
+                    class="block text-stone-700 font-medium group-hover:text-stone-900"
+                    >Proses terasa lambat atau ada bottleneck</span
+                  >
+                  <span class="block text-xs text-stone-400"
+                    >Titik kemacetan di mana beban kerja menumpuk di satu
+                    tahap.</span
+                  >
                 </div>
+              </label>
 
-                <div class="bg-white rounded-3xl shadow-xl shadow-stone-200/50 border border-stone-200 overflow-hidden">
-                    <div class="p-8 space-y-4">
-                        <p class="text-sm font-semibold text-stone-400 uppercase tracking-wider mb-4">Pilih yang terjadi pada tim Anda:</p>
-                        
-                        <label class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group">
-                            <input type="checkbox" class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500">
-                            <span class="ml-4 text-stone-700 font-medium group-hover:text-stone-900">Banyak komplain dari user atau pelanggan</span>
-                        </label>
+              <label
+                class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group"
+              >
+                <input
+                  type="checkbox"
+                  class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500"
+                />
+                <span
+                  class="ml-4 text-stone-700 font-medium group-hover:text-stone-900"
+                  >Banyak input data manual & duplikasi kerja</span
+                >
+              </label>
 
-                        <label class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group">
-                            <input type="checkbox" class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500">
-                            <div class="ml-4">
-                                <span class="block text-stone-700 font-medium group-hover:text-stone-900">Proses terasa lambat atau ada bottleneck</span>
-                                <span class="block text-xs text-stone-400">Titik kemacetan di mana beban kerja menumpuk di satu tahap.</span>
-                            </div>
-                        </label>
+              <label
+                class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group"
+              >
+                <input
+                  type="checkbox"
+                  class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500"
+                />
+                <span
+                  class="ml-4 text-stone-700 font-medium group-hover:text-stone-900"
+                  >Terjadi kesalahan (error) berulang pada output</span
+                >
+              </label>
 
-                        <label class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group">
-                            <input type="checkbox" class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500">
-                            <span class="ml-4 text-stone-700 font-medium group-hover:text-stone-900">Banyak input data manual & duplikasi kerja</span>
-                        </label>
-
-                        <label class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group">
-                            <input type="checkbox" class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500">
-                            <span class="ml-4 text-stone-700 font-medium group-hover:text-stone-900">Terjadi kesalahan (error) berulang pada output</span>
-                        </label>
-
-                        <label class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group">
-                            <input type="checkbox" class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500">
-                            <span class="ml-4 text-stone-700 font-medium group-hover:text-stone-900">Ketidakjelasan pemilik tanggung jawab (Ownership)</span>
-                        </label>
-                    </div>
-
-                    <!-- Result Alert -->
-                    <div id="alertBanner" class="hidden p-8 bg-accent-50 border-t border-accent-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div class="flex items-start gap-4">
-                            <span class="text-3xl">⚠️</span>
-                            <div>
-                                <h4 class="font-bold text-accent-600 text-lg">BPI Wajib Dijalankan!</h4>
-                                <p class="text-stone-600 text-sm mt-1">Ditemukan 2 atau lebih indikator kegagalan proses. Kondisi ini menyebabkan pemborosan biaya dan risiko operasional yang tinggi.</p>
-                                <button onclick="scrollToSection('steps')" class="mt-4 bg-accent-600 text-white px-6 py-2 rounded-lg font-bold text-sm hover:bg-accent-700 transition-all">Lihat 10 Langkah Solusi &rarr;</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <label
+                class="flex items-center p-4 bg-stone-50 rounded-xl cursor-pointer hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200 group"
+              >
+                <input
+                  type="checkbox"
+                  class="trigger-check w-6 h-6 text-brand-600 rounded-md border-stone-300 focus:ring-brand-500"
+                />
+                <span
+                  class="ml-4 text-stone-700 font-medium group-hover:text-stone-900"
+                  >Ketidakjelasan pemilik tanggung jawab (Ownership)</span
+                >
+              </label>
             </div>
-        </section>
 
-        <!-- SECTION: 10 STEPS -->
-        <section id="steps" class="content-section py-20 px-4 bg-stone-900 text-stone-100">
-            <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-white">10 Langkah BPI</h2>
-                    <p class="text-stone-400 mt-2">Metodologi bertahap untuk melakukan perbaikan yang berkelanjutan.</p>
+            <!-- Result Alert -->
+            <div
+              id="alertBanner"
+              class="hidden p-8 bg-accent-50 border-t border-accent-100 animate-in fade-in slide-in-from-bottom-4 duration-500"
+            >
+              <div class="flex items-start gap-4">
+                <span class="text-3xl">⚠️</span>
+                <div>
+                  <h4 class="font-bold text-accent-600 text-lg">
+                    BPI Wajib Dijalankan!
+                  </h4>
+                  <p class="text-stone-600 text-sm mt-1">
+                    Ditemukan 2 atau lebih indikator kegagalan proses. Kondisi
+                    ini menyebabkan pemborosan biaya dan risiko operasional yang
+                    tinggi.
+                  </p>
+                  <button
+                    onclick="scrollToSection('steps')"
+                    class="mt-4 bg-accent-600 text-white px-6 py-2 rounded-lg font-bold text-sm hover:bg-accent-700 transition-all"
+                  >
+                    Lihat 10 Langkah Solusi &rarr;
+                  </button>
                 </div>
-
-                <!-- Step Tabs Desktop -->
-                <div class="hidden lg:grid grid-cols-5 gap-2 mb-8" id="stepTabs">
-                    <!-- JS Injected Tabs -->
-                </div>
-
-                <!-- Main Content Pane -->
-                <div class="bg-stone-800 rounded-3xl p-8 md:p-12 border border-stone-700 min-h-[450px] relative overflow-hidden" id="stepDetailPane">
-                    <!-- JS Injected Content -->
-                    <div class="flex items-center justify-center h-full">
-                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
-                    </div>
-                </div>
-
-                <!-- Navigation Buttons -->
-                <div class="flex justify-between items-center mt-8">
-                    <button id="prevStep" class="flex items-center gap-2 px-6 py-3 bg-stone-700 hover:bg-stone-600 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed">
-                        <span>&larr;</span> Sebelumnya
-                    </button>
-                    <div class="text-sm font-medium text-stone-500 uppercase tracking-widest" id="stepCounter">Step 1 / 10</div>
-                    <button id="nextStep" class="flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-700 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed font-bold">
-                        Selanjutnya <span>&rarr;</span>
-                    </button>
-                </div>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <!-- SECTION: TOOLS -->
-        <section id="tools" class="content-section py-20 px-4">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold text-stone-900">Tools Praktis Tim BPI</h2>
-                    <p class="text-stone-600 mt-2 max-w-2xl mx-auto">Gunakan alat-alat di bawah ini untuk membantu analisis harian tim Anda tanpa harus menggunakan sistem yang rumit.</p>
-                </div>
+      <!-- SECTION: 10 STEPS -->
+      <section
+        id="steps"
+        class="content-section py-20 px-4 bg-stone-900 text-stone-100"
+      >
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-white">10 Langkah BPI</h2>
+            <p class="text-stone-400 mt-2">
+              Metodologi bertahap untuk melakukan perbaikan yang berkelanjutan.
+            </p>
+          </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Priority Matrix -->
-                    <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm">
-                        <h3 class="font-bold text-xl text-stone-900 mb-2">1. Matrix Prioritas Proses</h3>
-                        <p class="text-sm text-stone-500 mb-6">Membantu menentukan proses mana yang harus diperbaiki duluan berdasarkan Dampak vs Usaha.</p>
-                        <div class="chart-container">
-                            <canvas id="matrixBubble"></canvas>
-                        </div>
-                        <div class="mt-6 p-4 bg-stone-50 rounded-xl border border-stone-100 text-xs text-stone-500">
-                            <strong>Rumus:</strong> Targetkan area <strong>"Quick Wins"</strong> (Dampak Tinggi, Effort Rendah).
-                        </div>
-                    </div>
+          <!-- Step Tabs Desktop -->
+          <div class="hidden lg:grid grid-cols-5 gap-2 mb-8" id="stepTabs">
+            <!-- JS Injected Tabs -->
+          </div>
 
-                    <div class="space-y-6">
-                        <!-- Root Cause Tool -->
-                        <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm">
-                            <h3 class="font-bold text-xl text-stone-900 mb-4">2. Root Cause Check (3x WHY)</h3>
-                            <div class="space-y-4">
-                                <div class="bg-red-50 p-4 rounded-xl border-l-4 border-red-500">
-                                    <p class="text-xs font-bold text-red-600 uppercase">Gejala Masalah:</p>
-                                    <p class="text-sm text-red-800 font-medium">Laporan bulanan selalu terlambat masuk.</p>
-                                </div>
-                                <div class="space-y-2 text-sm">
-                                    <div class="flex gap-3"><span class="font-bold text-stone-400">WHY 1:</span> <span class="text-stone-700">Data dari divisi A belum dikirim.</span></div>
-                                    <div class="flex gap-3"><span class="font-bold text-stone-400">WHY 2:</span> <span class="text-stone-700">Divisi A melakukan input manual dari Excel ke sistem.</span></div>
-                                    <div class="flex gap-3"><span class="font-bold text-stone-400">WHY 3:</span> <span class="text-stone-700">Tidak ada integrasi API antara Excel dan Sistem Utama.</span></div>
-                                </div>
-                                <div class="bg-emerald-50 p-4 rounded-xl border-l-4 border-emerald-500 mt-4">
-                                    <p class="text-xs font-bold text-emerald-600 uppercase">Akar Masalah (Root Cause):</p>
-                                    <p class="text-sm text-emerald-800 font-bold italic">Masalah Integrasi Sistem (Teknis), bukan kelalaian orang.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Improvement Checklist -->
-                        <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm">
-                            <h3 class="font-bold text-xl text-stone-900 mb-4">3. Improvement Checklist</h3>
-                            <div class="space-y-2">
-                                <label class="flex items-center gap-3 p-3 hover:bg-stone-50 rounded-lg cursor-pointer">
-                                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded">
-                                    <span class="text-sm text-stone-700 font-medium">Bisa di-<strong>Eliminate</strong> (dihapus)?</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 hover:bg-stone-50 rounded-lg cursor-pointer">
-                                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded">
-                                    <span class="text-sm text-stone-700 font-medium">Bisa di-<strong>Simplify</strong> (disederhanakan)?</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 hover:bg-stone-50 rounded-lg cursor-pointer">
-                                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded">
-                                    <span class="text-sm text-stone-700 font-medium">Bisa di-<strong>Automate</strong> (otomasi)?</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <!-- Main Content Pane -->
+          <div
+            class="bg-stone-800 rounded-3xl p-8 md:p-12 border border-stone-700 min-h-[450px] relative overflow-hidden"
+            id="stepDetailPane"
+          >
+            <!-- JS Injected Content -->
+            <div class="flex items-center justify-center h-full">
+              <div
+                class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"
+              ></div>
             </div>
-        </section>
+          </div>
 
-        <!-- SECTION: RULES -->
-        <section id="rules" class="content-section py-20 px-4 bg-white">
-            <div class="max-w-5xl mx-auto">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold text-stone-900">Tim & Etika BPI</h2>
-                    <p class="text-stone-500 mt-2">Keberhasilan perbaikan bergantung pada kolaborasi tim yang sehat.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- DOs -->
-                    <div class="p-8 rounded-3xl bg-emerald-50 border border-emerald-100">
-                        <h4 class="text-xl font-bold text-emerald-700 mb-6 flex items-center gap-2">
-                            <span>✅</span> WAJIB LAKUKAN (DO)
-                        </h4>
-                        <ul class="space-y-4">
-                            <li class="flex gap-3 items-start">
-                                <span class="text-emerald-500 font-bold mt-1">•</span>
-                                <span class="text-emerald-900 text-sm">Fokus pada <strong>Sistem & Proses</strong>, bukan menyalahkan individu (No-Blame Culture).</span>
-                            </li>
-                            <li class="flex gap-3 items-start">
-                                <span class="text-emerald-500 font-bold mt-1">•</span>
-                                <span class="text-emerald-900 text-sm">Gunakan <strong>Data Aktual</strong> sebagai dasar perbaikan, bukan sekadar asumsi atau perasaan.</span>
-                            </li>
-                            <li class="flex gap-3 items-start">
-                                <span class="text-emerald-500 font-bold mt-1">•</span>
-                                <span class="text-emerald-900 text-sm">Libatkan <strong>Pelaku Lapangan</strong> (SME) dalam setiap tahap mapping.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- DON'Ts -->
-                    <div class="p-8 rounded-3xl bg-red-50 border border-red-100">
-                        <h4 class="text-xl font-bold text-red-700 mb-6 flex items-center gap-2">
-                            <span>❌</span> JANGAN LAKUKAN (DON'T)
-                        </h4>
-                        <ul class="space-y-4">
-                            <li class="flex gap-3 items-start">
-                                <span class="text-red-500 font-bold mt-1">•</span>
-                                <span class="text-red-900 text-sm">Memberikan solusi tanpa melakukan <strong>Mapping & Root Cause Analysis</strong> terlebih dahulu.</span>
-                            </li>
-                            <li class="flex gap-3 items-start">
-                                <span class="text-red-500 font-bold mt-1">•</span>
-                                <span class="text-red-900 text-sm">Membuat proses baru yang jauh lebih <strong>Kompleks</strong> dari proses sebelumnya.</span>
-                            </li>
-                            <li class="flex gap-3 items-start">
-                                <span class="text-red-500 font-bold mt-1">•</span>
-                                <span class="text-red-900 text-sm">Mengabaikan <strong>User Pain</strong> (penderitaan pengguna) dalam desain proses baru.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="mt-20 text-center text-stone-400 text-xs tracking-widest uppercase">
-                    &copy; 2026 BPI Guide Digital Experience • Dirancang untuk Keunggulan Operasional
-                </div>
+          <!-- Navigation Buttons -->
+          <div class="flex justify-between items-center mt-8">
+            <button
+              id="prevStep"
+              class="flex items-center gap-2 px-6 py-3 bg-stone-700 hover:bg-stone-600 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <span>&larr;</span> Sebelumnya
+            </button>
+            <div
+              class="text-sm font-medium text-stone-500 uppercase tracking-widest"
+              id="stepCounter"
+            >
+              Step 1 / 10
             </div>
-        </section>
+            <button
+              id="nextStep"
+              class="flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-700 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed font-bold"
+            >
+              Selanjutnya <span>&rarr;</span>
+            </button>
+          </div>
+        </div>
+      </section>
 
+      <!-- SECTION: TOOLS -->
+      <section id="tools" class="content-section py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-stone-900">
+              Tools Praktis Tim BPI
+            </h2>
+            <p class="text-stone-600 mt-2 max-w-2xl mx-auto">
+              Gunakan alat-alat di bawah ini untuk membantu analisis harian tim
+              Anda tanpa harus menggunakan sistem yang rumit.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Priority Matrix -->
+            <div
+              class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm"
+            >
+              <h3 class="font-bold text-xl text-stone-900 mb-2">
+                1. Matrix Prioritas Proses
+              </h3>
+              <p class="text-sm text-stone-500 mb-6">
+                Membantu menentukan proses mana yang harus diperbaiki duluan
+                berdasarkan Dampak vs Usaha.
+              </p>
+              <div class="chart-container">
+                <canvas id="matrixBubble"></canvas>
+              </div>
+              <div
+                class="mt-6 p-4 bg-stone-50 rounded-xl border border-stone-100 text-xs text-stone-500"
+              >
+                <strong>Rumus:</strong> Targetkan area
+                <strong>"Quick Wins"</strong> (Dampak Tinggi, Effort Rendah).
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <!-- Root Cause Tool -->
+              <div
+                class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm"
+              >
+                <h3 class="font-bold text-xl text-stone-900 mb-4">
+                  2. Root Cause Check (3x WHY)
+                </h3>
+                <div class="space-y-4">
+                  <div
+                    class="bg-red-50 p-4 rounded-xl border-l-4 border-red-500"
+                  >
+                    <p class="text-xs font-bold text-red-600 uppercase">
+                      Gejala Masalah:
+                    </p>
+                    <p class="text-sm text-red-800 font-medium">
+                      Laporan bulanan selalu terlambat masuk.
+                    </p>
+                  </div>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex gap-3">
+                      <span class="font-bold text-stone-400">WHY 1:</span>
+                      <span class="text-stone-700"
+                        >Data dari divisi A belum dikirim.</span
+                      >
+                    </div>
+                    <div class="flex gap-3">
+                      <span class="font-bold text-stone-400">WHY 2:</span>
+                      <span class="text-stone-700"
+                        >Divisi A melakukan input manual dari Excel ke
+                        sistem.</span
+                      >
+                    </div>
+                    <div class="flex gap-3">
+                      <span class="font-bold text-stone-400">WHY 3:</span>
+                      <span class="text-stone-700"
+                        >Tidak ada integrasi API antara Excel dan Sistem
+                        Utama.</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="bg-emerald-50 p-4 rounded-xl border-l-4 border-emerald-500 mt-4"
+                  >
+                    <p class="text-xs font-bold text-emerald-600 uppercase">
+                      Akar Masalah (Root Cause):
+                    </p>
+                    <p class="text-sm text-emerald-800 font-bold italic">
+                      Masalah Integrasi Sistem (Teknis), bukan kelalaian orang.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Improvement Checklist -->
+              <div
+                class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm"
+              >
+                <h3 class="font-bold text-xl text-stone-900 mb-4">
+                  3. Improvement Checklist
+                </h3>
+                <div class="space-y-2">
+                  <label
+                    class="flex items-center gap-3 p-3 hover:bg-stone-50 rounded-lg cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      class="w-5 h-5 text-brand-600 rounded"
+                    />
+                    <span class="text-sm text-stone-700 font-medium"
+                      >Bisa di-<strong>Eliminate</strong> (dihapus)?</span
+                    >
+                  </label>
+                  <label
+                    class="flex items-center gap-3 p-3 hover:bg-stone-50 rounded-lg cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      class="w-5 h-5 text-brand-600 rounded"
+                    />
+                    <span class="text-sm text-stone-700 font-medium"
+                      >Bisa di-<strong>Simplify</strong> (disederhanakan)?</span
+                    >
+                  </label>
+                  <label
+                    class="flex items-center gap-3 p-3 hover:bg-stone-50 rounded-lg cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      class="w-5 h-5 text-brand-600 rounded"
+                    />
+                    <span class="text-sm text-stone-700 font-medium"
+                      >Bisa di-<strong>Automate</strong> (otomasi)?</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: RULES -->
+      <section id="rules" class="content-section py-20 px-4 bg-white">
+        <div class="max-w-5xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-stone-900">Tim & Etika BPI</h2>
+            <p class="text-stone-500 mt-2">
+              Keberhasilan perbaikan bergantung pada kolaborasi tim yang sehat.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- DOs -->
+            <div
+              class="p-8 rounded-3xl bg-emerald-50 border border-emerald-100"
+            >
+              <h4
+                class="text-xl font-bold text-emerald-700 mb-6 flex items-center gap-2"
+              >
+                <span>✅</span> WAJIB LAKUKAN (DO)
+              </h4>
+              <ul class="space-y-4">
+                <li class="flex gap-3 items-start">
+                  <span class="text-emerald-500 font-bold mt-1">•</span>
+                  <span class="text-emerald-900 text-sm"
+                    >Fokus pada <strong>Sistem & Proses</strong>, bukan
+                    menyalahkan individu (No-Blame Culture).</span
+                  >
+                </li>
+                <li class="flex gap-3 items-start">
+                  <span class="text-emerald-500 font-bold mt-1">•</span>
+                  <span class="text-emerald-900 text-sm"
+                    >Gunakan <strong>Data Aktual</strong> sebagai dasar
+                    perbaikan, bukan sekadar asumsi atau perasaan.</span
+                  >
+                </li>
+                <li class="flex gap-3 items-start">
+                  <span class="text-emerald-500 font-bold mt-1">•</span>
+                  <span class="text-emerald-900 text-sm"
+                    >Libatkan <strong>Pelaku Lapangan</strong> (SME) dalam
+                    setiap tahap mapping.</span
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <!-- DON'Ts -->
+            <div class="p-8 rounded-3xl bg-red-50 border border-red-100">
+              <h4
+                class="text-xl font-bold text-red-700 mb-6 flex items-center gap-2"
+              >
+                <span>❌</span> JANGAN LAKUKAN (DON'T)
+              </h4>
+              <ul class="space-y-4">
+                <li class="flex gap-3 items-start">
+                  <span class="text-red-500 font-bold mt-1">•</span>
+                  <span class="text-red-900 text-sm"
+                    >Memberikan solusi tanpa melakukan
+                    <strong>Mapping & Root Cause Analysis</strong> terlebih
+                    dahulu.</span
+                  >
+                </li>
+                <li class="flex gap-3 items-start">
+                  <span class="text-red-500 font-bold mt-1">•</span>
+                  <span class="text-red-900 text-sm"
+                    >Membuat proses baru yang jauh lebih
+                    <strong>Kompleks</strong> dari proses sebelumnya.</span
+                  >
+                </li>
+                <li class="flex gap-3 items-start">
+                  <span class="text-red-500 font-bold mt-1">•</span>
+                  <span class="text-red-900 text-sm"
+                    >Mengabaikan <strong>User Pain</strong> (penderitaan
+                    pengguna) dalam desain proses baru.</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            class="mt-20 text-center text-stone-400 text-xs tracking-widest uppercase"
+          >
+            &copy; 2026 BPI Guide Digital Experience • Dirancang untuk
+            Keunggulan Operasional
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- JS SCRIPTS -->
     <script>
-        // --- DATA & STATE ---
-        const bpiSteps = [
-            { title: "Process Inventory", def: "Daftar semua proses.", details: "Catat semua aktivitas operasional yang ada. Gunakan scoring sederhana untuk melihat mana yang memiliki dampak paling besar namun saat ini paling bermasalah." },
-            { title: "Define Scope", def: "Tentukan batasan.", details: "Cegah <strong>Scope Creep</strong>. Tentukan titik start, titik end, dan siapa saja stakeholder yang benar-benar terlibat. Jangan melebar ke proses lain." },
-            { title: "Process Mapping", def: "Visualisasi alur.", details: "Gunakan flowchart atau <strong>Swimlane Diagram</strong>. Identifikasi titik <strong>Handoff</strong> (perpindahan kerja antar orang) karena di situlah risiko error tertinggi." },
-            { title: "Measure Time & Cost", def: "Ukur performa.", details: "Cari data baseline: Berapa lama waktu dari awal sampai akhir (Lead Time)? Berapa biaya SDM yang habis untuk setiap siklus proses?" },
-            { title: "Validate", def: "Cross-check lapangan.", details: "Konfirmasi hasil mapping dengan orang yang benar-benar melakukan pekerjaan. Pastikan alur di kertas sesuai dengan realitas di lapangan." },
-            { title: "Improve", def: "Optimasi alur.", details: "Gunakan teknik <strong>Eliminate, Simplify,</strong> atau <strong>Automate</strong>. Hilangkan birokrasi yang tidak menambah value (Nilai Tambah)." },
-            { title: "Control & Metrics", def: "Buat KPI.", details: "Tentukan angka keberhasilan. Contoh: Mengurangi waktu tunggu sebesar 30%. Buat alat kontrol agar tim tidak kembali ke cara kerja lama." },
-            { title: "Test", def: "Uji coba skala kecil.", details: "Lakukan simulasi atau pilot project. Cari celah atau error yang mungkin muncul pada rancangan proses baru sebelum diluncurkan penuh." },
-            { title: "Implement", def: "Sosialisasi & Launch.", details: "Lakukan training dan kelola perubahan (Change Management). Komunikasikan manfaat proses baru kepada seluruh tim agar mereka mau beradaptasi." },
-            { title: "Continuous Improve", def: "Iterasi berkala.", details: "Evaluasi hasil perbaikan secara berkala. Dunia bisnis berubah, proses yang efektif hari ini mungkin butuh perbaikan lagi tahun depan." }
-        ];
+      // --- DATA & STATE ---
+      const bpiSteps = [
+        {
+          title: "Process Inventory",
+          def: "Daftar semua proses.",
+          details:
+            "Catat semua aktivitas operasional yang ada. Gunakan scoring sederhana untuk melihat mana yang memiliki dampak paling besar namun saat ini paling bermasalah.",
+        },
+        {
+          title: "Define Scope",
+          def: "Tentukan batasan.",
+          details:
+            "Cegah <strong>Scope Creep</strong>. Tentukan titik start, titik end, dan siapa saja stakeholder yang benar-benar terlibat. Jangan melebar ke proses lain.",
+        },
+        {
+          title: "Process Mapping",
+          def: "Visualisasi alur.",
+          details:
+            "Gunakan flowchart atau <strong>Swimlane Diagram</strong>. Identifikasi titik <strong>Handoff</strong> (perpindahan kerja antar orang) karena di situlah risiko error tertinggi.",
+        },
+        {
+          title: "Measure Time & Cost",
+          def: "Ukur performa.",
+          details:
+            "Cari data baseline: Berapa lama waktu dari awal sampai akhir (Lead Time)? Berapa biaya SDM yang habis untuk setiap siklus proses?",
+        },
+        {
+          title: "Validate",
+          def: "Cross-check lapangan.",
+          details:
+            "Konfirmasi hasil mapping dengan orang yang benar-benar melakukan pekerjaan. Pastikan alur di kertas sesuai dengan realitas di lapangan.",
+        },
+        {
+          title: "Improve",
+          def: "Optimasi alur.",
+          details:
+            "Gunakan teknik <strong>Eliminate, Simplify,</strong> atau <strong>Automate</strong>. Hilangkan birokrasi yang tidak menambah value (Nilai Tambah).",
+        },
+        {
+          title: "Control & Metrics",
+          def: "Buat KPI.",
+          details:
+            "Tentukan angka keberhasilan. Contoh: Mengurangi waktu tunggu sebesar 30%. Buat alat kontrol agar tim tidak kembali ke cara kerja lama.",
+        },
+        {
+          title: "Test",
+          def: "Uji coba skala kecil.",
+          details:
+            "Lakukan simulasi atau pilot project. Cari celah atau error yang mungkin muncul pada rancangan proses baru sebelum diluncurkan penuh.",
+        },
+        {
+          title: "Implement",
+          def: "Sosialisasi & Launch.",
+          details:
+            "Lakukan training dan kelola perubahan (Change Management). Komunikasikan manfaat proses baru kepada seluruh tim agar mereka mau beradaptasi.",
+        },
+        {
+          title: "Continuous Improve",
+          def: "Iterasi berkala.",
+          details:
+            "Evaluasi hasil perbaikan secara berkala. Dunia bisnis berubah, proses yang efektif hari ini mungkin butuh perbaikan lagi tahun depan.",
+        },
+      ];
 
-        let activeStep = 0;
+      let activeStep = 0;
 
-        // --- UI LOGIC ---
+      // --- UI LOGIC ---
 
-        // Navbar Interaction
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.content-section');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const menuIcon = document.getElementById('menuIcon');
+      // Navbar Interaction
+      const navLinks = document.querySelectorAll(".nav-link");
+      const sections = document.querySelectorAll(".content-section");
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const menuIcon = document.getElementById("menuIcon");
 
-        function scrollToSection(id) {
-            const section = document.getElementById(id);
-            if (section) {
-                window.scrollTo({
-                    top: section.offsetTop - 64, // navbar height
-                    behavior: 'smooth'
-                });
-                mobileMenu.classList.add('hidden');
-            }
+      function scrollToSection(id) {
+        const section = document.getElementById(id);
+        if (section) {
+          window.scrollTo({
+            top: section.offsetTop - 64, // navbar height
+            behavior: "smooth",
+          });
+          mobileMenu.classList.add("hidden");
         }
+      }
 
-        mobileMenuBtn.onclick = () => {
-            mobileMenu.classList.toggle('hidden');
-            menuIcon.innerHTML = mobileMenu.classList.contains('hidden') ? '&#9776;' : '&#10005;';
+      mobileMenuBtn.onclick = () => {
+        mobileMenu.classList.toggle("hidden");
+        menuIcon.innerHTML = mobileMenu.classList.contains("hidden")
+          ? "&#9776;"
+          : "&#10005;";
+      };
+
+      navLinks.forEach((link) => {
+        link.onclick = (e) => {
+          e.preventDefault();
+          scrollToSection(link.dataset.target);
         };
+      });
 
-        navLinks.forEach(link => {
-            link.onclick = (e) => {
-                e.preventDefault();
-                scrollToSection(link.dataset.target);
-            };
-        });
-
-        // Active Link Observer
-        const obsOptions = { threshold: 0.5 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    navLinks.forEach(l => {
-                        l.classList.toggle('nav-active', l.dataset.target === entry.target.id);
-                    });
-                }
+      // Active Link Observer
+      const obsOptions = { threshold: 0.5 };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            navLinks.forEach((l) => {
+              l.classList.toggle(
+                "nav-active",
+                l.dataset.target === entry.target.id,
+              );
             });
-        }, obsOptions);
-        sections.forEach(s => observer.observe(s));
-
-        // Trigger Checklist
-        const checkboxes = document.querySelectorAll('.trigger-check');
-        const alertBanner = document.getElementById('alertBanner');
-        checkboxes.forEach(cb => {
-            cb.onchange = () => {
-                const count = Array.from(checkboxes).filter(c => c.checked).length;
-                alertBanner.classList.toggle('hidden', count < 2);
-            };
+          }
         });
+      }, obsOptions);
+      sections.forEach((s) => observer.observe(s));
 
-        // Steps Interaction
-        const stepDetailPane = document.getElementById('stepDetailPane');
-        const stepTabs = document.getElementById('stepTabs');
-        const stepCounter = document.getElementById('stepCounter');
-        const nextBtn = document.getElementById('nextStep');
-        const prevBtn = document.getElementById('prevStep');
+      // Trigger Checklist
+      const checkboxes = document.querySelectorAll(".trigger-check");
+      const alertBanner = document.getElementById("alertBanner");
+      checkboxes.forEach((cb) => {
+        cb.onchange = () => {
+          const count = Array.from(checkboxes).filter((c) => c.checked).length;
+          alertBanner.classList.toggle("hidden", count < 2);
+        };
+      });
 
-        function renderSteps() {
-            // Render Tabs
-            stepTabs.innerHTML = bpiSteps.map((s, i) => `
-                <button onclick="changeStep(${i})" class="flex flex-col items-center p-3 rounded-xl transition-all ${activeStep === i ? 'bg-brand-600 text-white shadow-lg' : 'bg-stone-800 text-stone-500 hover:text-stone-300'}">
+      // Steps Interaction
+      const stepDetailPane = document.getElementById("stepDetailPane");
+      const stepTabs = document.getElementById("stepTabs");
+      const stepCounter = document.getElementById("stepCounter");
+      const nextBtn = document.getElementById("nextStep");
+      const prevBtn = document.getElementById("prevStep");
+
+      function renderSteps() {
+        // Render Tabs
+        stepTabs.innerHTML = bpiSteps
+          .map(
+            (s, i) => `
+                <button onclick="changeStep(${i})" class="flex flex-col items-center p-3 rounded-xl transition-all ${activeStep === i ? "bg-brand-600 text-white shadow-lg" : "bg-stone-800 text-stone-500 hover:text-stone-300"}">
                     <span class="text-xs font-bold">${i + 1}</span>
                     <span class="text-[10px] hidden md:block truncate w-full text-center mt-1">${s.title}</span>
                 </button>
-            `).join('');
+            `,
+          )
+          .join("");
 
-            // Render Content
-            const step = bpiSteps[activeStep];
-            stepDetailPane.innerHTML = `
+        // Render Content
+        const step = bpiSteps[activeStep];
+        stepDetailPane.innerHTML = `
                 <div class="animate-in fade-in duration-500 flex flex-col justify-center h-full">
                     <div class="text-brand-500 font-bold uppercase tracking-widest text-xs mb-4">Langkah Strategis #${activeStep + 1}</div>
                     <h3 class="text-3xl md:text-5xl font-extrabold text-white mb-6">${step.title}</h3>
@@ -505,62 +906,104 @@
                 </div>
             `;
 
-            stepCounter.innerText = `Langkah ${activeStep + 1} / 10`;
-            prevBtn.disabled = activeStep === 0;
-            nextBtn.disabled = activeStep === bpiSteps.length - 1;
-        }
+        stepCounter.innerText = `Langkah ${activeStep + 1} / 10`;
+        prevBtn.disabled = activeStep === 0;
+        nextBtn.disabled = activeStep === bpiSteps.length - 1;
+      }
 
-        window.changeStep = (i) => { activeStep = i; renderSteps(); };
-        nextBtn.onclick = () => { if(activeStep < 9) changeStep(activeStep + 1); };
-        prevBtn.onclick = () => { if(activeStep > 0) changeStep(activeStep - 1); };
-
+      window.changeStep = (i) => {
+        activeStep = i;
         renderSteps();
+      };
+      nextBtn.onclick = () => {
+        if (activeStep < 9) changeStep(activeStep + 1);
+      };
+      prevBtn.onclick = () => {
+        if (activeStep > 0) changeStep(activeStep - 1);
+      };
 
-        // --- VISUALIZATIONS ---
-        window.onload = () => {
-            // 1. Radar Chart
-            new Chart(document.getElementById('pillarRadar'), {
-                type: 'radar',
-                data: {
-                    labels: ['Efektivitas', 'Efisiensi', 'Adaptabilitas'],
-                    datasets: [{
-                        label: 'Keseimbangan Proses',
-                        data: [10, 8, 7],
-                        backgroundColor: 'rgba(20, 184, 166, 0.2)',
-                        borderColor: '#14b8a6',
-                        pointBackgroundColor: '#f59e0b'
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: { grid: { color: '#e5e7eb' }, ticks: { display: false }, min: 0 }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
+      renderSteps();
 
-            // 2. Matrix Bubble Chart
-            new Chart(document.getElementById('matrixBubble'), {
-                type: 'bubble',
-                data: {
-                    datasets: [
-                        { label: 'Quick Wins', data: [{x: 2, y: 8, r: 15}], backgroundColor: '#10b981' },
-                        { label: 'Proyek Strategis', data: [{x: 8, y: 9, r: 10}], backgroundColor: '#3b82f6' },
-                        { label: 'Tugas Rutin', data: [{x: 2, y: 3, r: 8}], backgroundColor: '#f59e0b' },
-                        { label: 'Lupakan', data: [{x: 8, y: 2, r: 6}], backgroundColor: '#ef4444' }
-                    ]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { title: { display: true, text: 'Effort (Usaha) ➔' }, min: 0, max: 10 },
-                        y: { title: { display: true, text: 'Impact (Dampak) ➔' }, min: 0, max: 10 }
-                    },
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: {size: 10} } } }
-                }
-            });
-        };
+      // --- VISUALIZATIONS ---
+      window.onload = () => {
+        // 1. Radar Chart
+        new Chart(document.getElementById("pillarRadar"), {
+          type: "radar",
+          data: {
+            labels: ["Efektivitas", "Efisiensi", "Adaptabilitas"],
+            datasets: [
+              {
+                label: "Keseimbangan Proses",
+                data: [10, 8, 7],
+                backgroundColor: "rgba(20, 184, 166, 0.2)",
+                borderColor: "#14b8a6",
+                pointBackgroundColor: "#f59e0b",
+              },
+            ],
+          },
+          options: {
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                grid: { color: "#e5e7eb" },
+                ticks: { display: false },
+                min: 0,
+              },
+            },
+            plugins: { legend: { display: false } },
+          },
+        });
+
+        // 2. Matrix Bubble Chart
+        new Chart(document.getElementById("matrixBubble"), {
+          type: "bubble",
+          data: {
+            datasets: [
+              {
+                label: "Quick Wins",
+                data: [{ x: 2, y: 8, r: 15 }],
+                backgroundColor: "#10b981",
+              },
+              {
+                label: "Proyek Strategis",
+                data: [{ x: 8, y: 9, r: 10 }],
+                backgroundColor: "#3b82f6",
+              },
+              {
+                label: "Tugas Rutin",
+                data: [{ x: 2, y: 3, r: 8 }],
+                backgroundColor: "#f59e0b",
+              },
+              {
+                label: "Lupakan",
+                data: [{ x: 8, y: 2, r: 6 }],
+                backgroundColor: "#ef4444",
+              },
+            ],
+          },
+          options: {
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                title: { display: true, text: "Effort (Usaha) ➔" },
+                min: 0,
+                max: 10,
+              },
+              y: {
+                title: { display: true, text: "Impact (Dampak) ➔" },
+                min: 0,
+                max: 10,
+              },
+            },
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { boxWidth: 10, font: { size: 10 } },
+              },
+            },
+          },
+        });
+      };
     </script>
-</body>
+  </body>
 </html>
