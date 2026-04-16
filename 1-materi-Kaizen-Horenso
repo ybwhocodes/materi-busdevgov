@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasbor Analisis Strategis: Kaizen & Horenso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+
+        .tab-active {
+            background-color: #0f766e; 
+            color: white;
+            border-color: #0f766e;
+        }
+        
+        .nav-active {
+            color: #0f766e;
+            border-bottom: 2px solid #0f766e;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-teal-800">Kaizen & Horenso</span>
+                </div>
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="#overview" class="text-xs lg:text-sm font-medium text-stone-600 hover:text-teal-700 transition nav-link nav-active">Tinjauan</a>
+                    <a href="#budaya" class="text-xs lg:text-sm font-medium text-stone-600 hover:text-teal-700 transition nav-link">Budaya</a>
+                    <a href="#dampak" class="text-xs lg:text-sm font-medium text-stone-600 hover:text-teal-700 transition nav-link">Dampak</a>
+                    <a href="#glosarium" class="text-xs lg:text-sm font-medium text-stone-600 hover:text-teal-700 transition nav-link">Glosarium</a>
+                    <a href="#rekomendasi" class="text-xs lg:text-sm font-medium text-stone-600 hover:text-teal-700 transition nav-link">Rekomendasi</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <!-- SECTION: Overview -->
+        <section id="overview" class="pt-8">
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8 md:p-12">
+                <div class="max-w-3xl">
+                    <h1 class="text-3xl md:text-4xl font-bold text-stone-900 mb-4 text-balance">Integrasi Budaya Kerja: Strategi Peningkatan Produktivitas</h1>
+                    <p class="text-lg text-stone-600 mb-6 leading-relaxed">
+                        Analisis strategis mengenai pengaruh budaya kerja Jepang (Kaizen dan Horenso) di Departemen Produksi PT. Yamaha Music Indonesia (MIMA). Laporan ini berfokus pada mengapa target produksi sering tidak tercapai dan bagaimana sinergi budaya dapat memperbaikinya.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-teal-50 border border-teal-100 rounded-lg p-5">
+                            <p class="text-xs text-teal-600 font-bold uppercase tracking-wider mb-2">Problem Statement</p>
+                            <p class="text-stone-700 text-sm">Ketidaktercapaian target produksi bulanan (April-Desember 2017) menjadi anomali di tengah penerapan budaya kerja yang tampak sudah baik.</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-100 rounded-lg p-5">
+                            <p class="text-xs text-amber-600 font-bold uppercase tracking-wider mb-2">Key Finding</p>
+                            <p class="text-stone-700 text-sm">Budaya Horenso (komunikasi) secara individual memberikan dampak lebih besar daripada Kaizen fisik, namun kombinasi keduanya memberikan dampak <span class="font-bold text-amber-700">65.6%</span>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Budaya Kerja -->
+        <section id="budaya" class="scroll-mt-24 space-y-12">
+            <div>
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-stone-800 border-l-4 border-teal-600 pl-3">Eksplorasi Budaya Kerja</h2>
+                    <p class="text-stone-600 mt-2 max-w-4xl italic">Klik pada masing-masing tab atau elemen untuk melihat detail operasional.</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3">
+                        <div class="bg-stone-50 border-r border-stone-200 p-4 space-y-2" id="kaizenTabs">
+                            <h3 class="px-4 py-2 text-xs font-bold text-stone-400 uppercase tracking-widest">Pilar Kaizen</h3>
+                            <button class="w-full text-left px-4 py-3 rounded-lg border border-stone-200 font-medium text-stone-700 hover:bg-teal-50 transition tab-active text-sm" onclick="showKaizenContent('5s', this)">
+                                1. Metode 5-S (5R)
+                            </button>
+                            <button class="w-full text-left px-4 py-3 rounded-lg border border-stone-200 font-medium text-stone-700 hover:bg-teal-50 transition text-sm" onclick="showKaizenContent('tqm', this)">
+                                2. Total Quality Management
+                            </button>
+                            <button class="w-full text-left px-4 py-3 rounded-lg border border-stone-200 font-medium text-stone-700 hover:bg-teal-50 transition text-sm" onclick="showKaizenContent('jit', this)">
+                                3. Just-In-Time (JIT)
+                            </button>
+                            <button class="w-full text-left px-4 py-3 rounded-lg border border-stone-200 font-medium text-stone-700 hover:bg-teal-50 transition text-sm" onclick="showKaizenContent('tpm', this)">
+                                4. Total Productive Maintenance
+                            </button>
+                            <button class="w-full text-left px-4 py-3 rounded-lg border border-stone-200 font-medium text-stone-700 hover:bg-teal-50 transition text-sm" onclick="showKaizenContent('kss', this)">
+                                5. Kaizen Suggestion System
+                            </button>
+                            <button class="w-full text-left px-4 py-3 rounded-lg border border-stone-200 font-medium text-stone-700 hover:bg-teal-50 transition text-sm" onclick="showKaizenContent('qcc', this)">
+                                6. Quality Control Circle
+                            </button>
+                        </div>
+                        
+                        <div class="col-span-2 p-6 md:p-10 flex items-center justify-center min-h-[400px]">
+                            <div id="content-5s" class="kaizen-panel w-full">
+                                <h3 class="text-xl font-bold text-teal-800 mb-4">Pondasi Kerja: 5-S (5R)</h3>
+                                <p class="mb-6 text-stone-600 text-sm">Metodologi penataan tempat kerja untuk menghilangkan pemborosan waktu dalam mencari alat dan bahan.</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="bg-white p-3 rounded border-l-4 border-teal-500 shadow-sm text-sm">
+                                        <span class="font-bold text-stone-800 block">Seiri (Ringkas):</span> Memilah barang penting.
+                                    </div>
+                                    <div class="bg-white p-3 rounded border-l-4 border-teal-500 shadow-sm text-sm">
+                                        <span class="font-bold text-stone-800 block">Seiton (Rapi):</span> Penataan alur akses alat.
+                                    </div>
+                                    <div class="bg-white p-3 rounded border-l-4 border-teal-500 shadow-sm text-sm">
+                                        <span class="font-bold text-stone-800 block">Seiso (Resik):</span> Pembersihan rutin.
+                                    </div>
+                                    <div class="bg-white p-3 rounded border-l-4 border-teal-500 shadow-sm text-sm">
+                                        <span class="font-bold text-stone-800 block">Seiketsu (Rawat):</span> Standarisasi kerapian.
+                                    </div>
+                                    <div class="bg-white p-3 rounded border-l-4 border-teal-500 shadow-sm text-sm sm:col-span-2">
+                                        <span class="font-bold text-stone-800 block">Shitsuke (Rajin):</span> Kedisiplinan berkelanjutan.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="content-tqm" class="kaizen-panel w-full hidden">
+                                <h3 class="text-xl font-bold text-teal-800 mb-4">Total Quality Management (TQM)</h3>
+                                <p class="text-stone-600 leading-relaxed text-sm">
+                                    Filosofi manajemen di mana <strong>seluruh anggota organisasi</strong> berpartisipasi dalam peningkatan proses, produk, layanan, dan budaya di mana mereka bekerja. Mutu bukan hanya tugas tim pemeriksa (QC), melainkan tanggung jawab operator di lini terdepan.
+                                </p>
+                            </div>
+
+                            <div id="content-jit" class="kaizen-panel w-full hidden">
+                                <h3 class="text-xl font-bold text-teal-800 mb-4">Just-In-Time (JIT)</h3>
+                                <p class="text-stone-600 text-sm mb-4 italic">Memproduksi hanya apa yang dibutuhkan, saat dibutuhkan, dalam jumlah yang dibutuhkan.</p>
+                                <div class="p-4 bg-stone-50 border border-stone-200 rounded-lg text-sm">
+                                    <p class="font-semibold text-stone-700">Tujuan Strategis:</p>
+                                    <p>Menghilangkan stok berlebih (inventori) yang membebani biaya dan ruang pabrik.</p>
+                                </div>
+                            </div>
+
+                            <div id="content-tpm" class="kaizen-panel w-full hidden">
+                                <h3 class="text-xl font-bold text-teal-800 mb-4">Total Productive Maintenance (TPM)</h3>
+                                <p class="text-stone-600 text-sm mb-4 leading-relaxed">Melibatkan operator produksi dalam pemeliharaan rutin peralatan mereka sendiri untuk mencegah terjadinya kerusakan mendadak.</p>
+                                <div class="flex gap-4">
+                                    <div class="bg-teal-50 p-3 rounded flex-1 text-center">
+                                        <span class="block font-bold text-teal-800">Zero Breakdown</span>
+                                        <span class="text-[10px] text-teal-600">Nol Kerusakan Mesin</span>
+                                    </div>
+                                    <div class="bg-teal-50 p-3 rounded flex-1 text-center">
+                                        <span class="block font-bold text-teal-800">Accident Free</span>
+                                        <span class="text-[10px] text-teal-600">Nol Kecelakaan Kerja</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="content-kss" class="kaizen-panel w-full hidden">
+                                <h3 class="text-xl font-bold text-teal-800 mb-4">Sistem Saran (Kaizen Teian)</h3>
+                                <p class="text-stone-600 text-sm leading-relaxed mb-4">Memberdayakan karyawan tingkat bawah untuk memberikan ide-ide perbaikan praktis guna memecahkan masalah harian.</p>
+                                <p class="text-xs bg-amber-50 p-3 border border-amber-100 rounded text-amber-800"><strong>Catatan:</strong> Semakin banyak ide dari karyawan, efisiensi kerja meningkat secara eksponensial.</p>
+                            </div>
+
+                            <div id="content-qcc" class="kaizen-panel w-full hidden">
+                                <h3 class="text-xl font-bold text-teal-800 mb-4">Quality Control Circle (QCC)</h3>
+                                <p class="text-stone-600 text-sm leading-relaxed">Kelompok diskusi kecil yang bertemu secara rutin untuk menganalisis masalah kualitas dan mencari solusinya menggunakan siklus PDCA.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Horenso Interaction -->
+            <div class="bg-white p-8 md:p-12 rounded-xl shadow-sm border border-stone-200">
+                <div class="text-center mb-10">
+                    <h3 class="text-xl font-bold text-stone-800">Alur Komunikasi Horenso</h3>
+                    <p class="text-sm text-stone-500 mt-2">Klik ikon untuk detail arah dan prinsip komunikasi.</p>
+                </div>
+                <div class="flex flex-col md:flex-row justify-around items-center gap-8">
+                    <div class="flex flex-col items-center group cursor-pointer" onclick="showHorensoDetail('houkoku')">
+                        <div class="w-20 h-20 rounded-2xl bg-teal-600 flex items-center justify-center mb-4 shadow-lg group-hover:bg-teal-700 transition">
+                            <span class="text-2xl font-bold text-white uppercase tracking-tighter">Ho</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800">Houkoku</h4>
+                        <span class="text-[10px] text-stone-400 uppercase">Laporan</span>
+                    </div>
+                    <div class="hidden md:block text-stone-200 text-2xl">➔</div>
+                    <div class="flex flex-col items-center group cursor-pointer" onclick="showHorensoDetail('renraku')">
+                        <div class="w-20 h-20 rounded-2xl bg-amber-600 flex items-center justify-center mb-4 shadow-lg group-hover:bg-amber-700 transition">
+                            <span class="text-2xl font-bold text-white uppercase tracking-tighter">Ren</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800">Renraku</h4>
+                        <span class="text-[10px] text-stone-400 uppercase">Kontak</span>
+                    </div>
+                    <div class="hidden md:block text-stone-200 text-2xl">➔</div>
+                    <div class="flex flex-col items-center group cursor-pointer" onclick="showHorensoDetail('soudan')">
+                        <div class="w-20 h-20 rounded-2xl bg-rose-600 flex items-center justify-center mb-4 shadow-lg group-hover:bg-rose-700 transition">
+                            <span class="text-2xl font-bold text-white uppercase tracking-tighter">So</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800">Soudan</h4>
+                        <span class="text-[10px] text-stone-400 uppercase">Konsultasi</span>
+                    </div>
+                </div>
+                <div id="horenso-info" class="mt-12 p-6 bg-stone-50 rounded-lg border border-stone-200 hidden">
+                    <h4 id="h-title" class="text-lg font-bold text-teal-800 mb-2"></h4>
+                    <p id="h-desc" class="text-sm text-stone-600 leading-relaxed"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Glosarium -->
+        <section id="glosarium" class="scroll-mt-24">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-stone-800 border-l-4 border-teal-600 pl-3">Glosarium Istilah</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-lg border border-stone-100 shadow-sm">
+                    <p class="font-bold text-sm text-teal-800 mb-1">Muda (無駄)</p>
+                    <p class="text-xs text-stone-500">Istilah Jepang untuk pemborosan; aktivitas yang menggunakan sumber daya tetapi tidak menambah nilai bagi pelanggan.</p>
+                </div>
+                <div class="bg-white p-5 rounded-lg border border-stone-100 shadow-sm">
+                    <p class="font-bold text-sm text-teal-800 mb-1">Gemba (現場)</p>
+                    <p class="text-xs text-stone-500">Tempat sebenarnya di mana nilai diciptakan (lantai produksi pabrik).</p>
+                </div>
+                <div class="bg-white p-5 rounded-lg border border-stone-100 shadow-sm">
+                    <p class="font-bold text-sm text-teal-800 mb-1">PDCA (Plan-Do-Check-Act)</p>
+                    <p class="text-xs text-stone-500">Siklus empat langkah untuk pengendalian dan peningkatan proses secara berkelanjutan.</p>
+                </div>
+                <div class="bg-white p-5 rounded-lg border border-stone-100 shadow-sm">
+                    <p class="font-bold text-sm text-teal-800 mb-1">R-Square</p>
+                    <p class="text-xs text-stone-500">Nilai statistik yang menunjukkan seberapa besar kontribusi variabel bebas dalam menjelaskan perubahan variabel terikat (Produktivitas).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Dampak -->
+        <section id="dampak" class="scroll-mt-24">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-stone-800 border-l-4 border-teal-600 pl-3">Analisis Dampak Produktivitas</h2>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200 flex flex-col items-center">
+                <div class="chart-container w-full mb-8">
+                    <canvas id="impactChart"></canvas>
+                </div>
+                <div class="max-w-2xl text-center space-y-4">
+                    <p class="text-stone-600 text-sm">Grafik di atas menunjukkan kontribusi (R-Square) masing-masing budaya. Meskipun secara parsial berdampak sedang, sinergi keduanya memberikan dampak signifikan sebesar <strong class="text-teal-700">65.6%</strong>.</p>
+                    <div class="p-4 bg-teal-50 rounded text-xs text-teal-800">
+                        <strong>Simpulan Data:</strong> Sisa 34.4% dipengaruhi faktor eksternal lain seperti lingkungan kerja fisik, kompensasi, dan kepemimpinan yang tidak masuk dalam cakupan penelitian ini.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Rekomendasi -->
+        <section id="rekomendasi" class="scroll-mt-24 mb-16">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-stone-800 border-l-4 border-teal-600 pl-3">Rekomendasi Strategis</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-6 bg-stone-900 text-white rounded-xl shadow-xl">
+                    <h3 class="text-lg font-bold mb-4 text-teal-400">Optimalisasi Operasional</h3>
+                    <ul class="space-y-4 text-sm text-stone-300">
+                        <li class="flex items-start"><span class="mr-2 text-teal-400">▶</span> Implementasi Digital Horenso untuk mempercepat respon temuan abnormal di lantai produksi.</li>
+                        <li class="flex items-start"><span class="mr-2 text-teal-400">▶</span> Audit berkala pada pilar 5-S (terutama Seiton) untuk memastikan alat kerja selalu dalam kondisi siap pakai.</li>
+                    </ul>
+                </div>
+                <div class="p-6 bg-white border border-stone-200 rounded-xl shadow-md">
+                    <h3 class="text-lg font-bold mb-4 text-teal-800">Intervensi Manusia</h3>
+                    <ul class="space-y-4 text-sm text-stone-600">
+                        <li class="flex items-start"><span class="mr-2 text-teal-600">▶</span> Pemberian remunerasi atau insentif berbasis jumlah ide Kaizen Teian yang berhasil diimplementasikan.</li>
+                        <li class="flex items-start"><span class="mr-2 text-teal-600">▶</span> Penyesuaian metode pelatihan visual untuk mengakomodasi profil mayoritas lulusan SMA.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-100 py-10 text-center text-stone-400 text-xs border-t border-stone-200">
+        <p>Berdasarkan Jurnal Ilmiah Manajemen MIX Volume 10, No. 2 (2020)</p>
+        <p class="mt-2">Simulasi Dasbor Interaktif untuk Business Analyst</p>
+    </footer>
+
+    <script>
+        // Tab Control
+        function showKaizenContent(id, el) {
+            document.querySelectorAll('.kaizen-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById('content-' + id).classList.remove('hidden');
+            
+            document.getElementById('kaizenTabs').querySelectorAll('button').forEach(b => b.classList.remove('tab-active'));
+            el.classList.add('tab-active');
+        }
+
+        // Horenso Detail Control
+        const hData = {
+            'houkoku': { title: 'Houkoku (Laporan)', desc: 'Pelaporan progres kerja dari bawahan ke atasan. Harus akurat, padat, dan jelas berdasarkan fakta TOP (Time, Organization, Place). Tanpa laporan yang baik, atasan tidak bisa mengambil keputusan yang tepat.' },
+            'renraku': { title: 'Renraku (Kontak)', desc: 'Komunikasi horizontal antar rekan sejawat untuk berbagi informasi aktual tanpa menunggu instruksi atau masalah muncul. Mencegah kerja silo dalam organisasi.' },
+            'soudan': { title: 'Soudan (Konsultasi)', desc: 'Diskusi dua arah untuk mencari solusi masalah. Bawahan didorong melakukan analisa mandiri sebelum berkonsultasi agar ide perbaikan lebih matang.' }
+        };
+
+        function showHorensoDetail(key) {
+            const info = document.getElementById('horenso-info');
+            document.getElementById('h-title').innerText = hData[key].title;
+            document.getElementById('h-desc').innerText = hData[key].desc;
+            info.classList.remove('hidden');
+        }
+
+        // Navigation Highlight
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        window.onscroll = () => {
+            let current = "";
+            sections.forEach(s => {
+                if (pageYOffset >= s.offsetTop - 150) current = s.getAttribute("id");
+            });
+            navLinks.forEach(l => {
+                l.classList.remove("nav-active");
+                if (l.getAttribute("href").includes(current)) l.classList.add("nav-active");
+            });
+        };
+
+        // Charts
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Budaya Kaizen (X1)', 'Budaya Horenso (X2)', 'Kombinasi Sinergis'],
+                    datasets: [{
+                        label: 'Persentase Pengaruh (R-Square)',
+                        data: [49.9, 58.5, 65.6],
+                        backgroundColor: ['#0f766e', '#d97706', '#1c1917'],
+                        borderRadius: 8,
+                        barThickness: 50
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` Dampak: ${ctx.parsed.y}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100,
+                            ticks: { callback: v => v + '%' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
