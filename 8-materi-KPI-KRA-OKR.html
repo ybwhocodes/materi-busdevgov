@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KPI vs KRA vs OKR - Performance Framework</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #f6f3eb;
+      --bg-card: #ffffff;
+      --navy-kpi: #17324d;
+      --cyan-kra: #18525b;
+      --gold-okr: #ab7b2b;
+      --text-main: #232a35;
+      --text-muted: #64748b;
+      --border-subtle: #e6dfd1;
+      --card-shadow: 0 10px 25px -5px rgba(27, 42, 63, 0.07), 0 8px 10px -6px rgba(27, 42, 63, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #fafaf9;
+      color: var(--text-main);
+      padding: 104px 0 40px;
+      line-height: 1.5;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ===== Shared site header (sama dengan halaman materi lain) ===== */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(246, 243, 235, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .site-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .site-brand img {
+      height: 44px;
+      width: auto;
+      display: block;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .site-nav a {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #6b6355;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      transition: color 0.15s ease;
+    }
+
+    .site-nav a:hover {
+      color: var(--navy-kpi);
+    }
+
+    .site-nav a.nav-dashboard {
+      background: var(--navy-kpi);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+      transition: background 0.15s ease;
+    }
+
+    .site-nav a.nav-dashboard:hover {
+      background: #0e2238;
+      color: #ffffff;
+    }
+
+    /* Header Visual & Typography */
+    .hero-header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800;
+      letter-spacing: 2px;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-title .kpi { color: var(--navy-kpi); }
+    .hero-title .kra { color: var(--cyan-kra); }
+    .hero-title .okr { color: var(--gold-okr); }
+
+    .hero-title .vs {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.42em;
+      font-style: italic;
+      font-weight: 500;
+      color: #948b7c;
+      text-transform: lowercase;
+    }
+
+    .hero-subtitle {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3.5px;
+      color: #7d7260;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .hero-subtitle::before,
+    .hero-subtitle::after {
+      content: "";
+      display: block;
+      width: 48px;
+      height: 1.5px;
+      background: #cfc6b5;
+    }
+
+    /* 3 Visual Perspective Columns */
+    .lenses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 36px;
+      position: relative;
+      scroll-margin-top: 90px;
+    }
+
+    .lens-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--card-shadow);
+      padding: 24px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .lens-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px -8px rgba(27, 42, 63, 0.12);
+    }
+
+    .lens-tagline {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      margin-bottom: 16px;
+    }
+
+    .lens-card.kpi .lens-tagline { color: var(--navy-kpi); }
+    .lens-card.kra .lens-tagline { color: var(--cyan-kra); }
+    .lens-card.okr .lens-tagline { color: var(--gold-okr); }
+
+    /* Visual Illustrations Containers */
+    .art-frame {
+      width: 100%;
+      height: 125px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .art-frame svg {
+      width: 100%;
+      height: 100%;
+      max-width: 250px;
+    }
+
+    /* Brush style pills */
+    .brush-pill {
+      display: inline-block;
+      color: #ffffff;
+      padding: 6px 32px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      margin-bottom: 8px;
+    }
+
+    .lens-card.kpi .brush-pill { background: linear-gradient(135deg, #1b3858, #0e2238); }
+    .lens-card.kra .brush-pill { background: linear-gradient(135deg, #1d616d, #0f3d45); }
+    .lens-card.okr .brush-pill { background: linear-gradient(135deg, #b88633, #875c18); }
+
+    .full-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .lens-motto {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-top: auto;
+    }
+
+    /* Comparison Table Styling */
+    .table-container {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--card-shadow);
+      overflow-x: auto;
+      margin-bottom: 30px;
+      scroll-margin-top: 90px;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 760px;
+      text-align: left;
+    }
+
+    .comparison-table thead tr {
+      background: #fbf9f4;
+      border-bottom: 1.5px solid var(--border-subtle);
+    }
+
+    .comparison-table th {
+      padding: 16px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .th-dimension {
+      width: 22%;
+      color: #756a59;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    .th-kpi { width: 26%; color: var(--navy-kpi); }
+    .th-kra { width: 26%; color: var(--cyan-kra); }
+    .th-okr { width: 26%; color: var(--gold-okr); }
+
+    .comparison-table tbody tr {
+      transition: background-color 0.15s ease;
+    }
+
+    .comparison-table tbody tr:hover {
+      background-color: #fdfcf9;
+    }
+
+    .comparison-table td, 
+    .comparison-table tbody th {
+      padding: 18px 20px;
+      vertical-align: top;
+      font-size: 0.92rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .cell-dim {
+      font-weight: 700;
+      color: #4b453a;
+      background-color: #faf7f0;
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    .dim-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .dim-sub {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #8c8272;
+      text-transform: none;
+      letter-spacing: normal;
+      margin-top: 3px;
+    }
+
+    .cell-kpi, .cell-kra {
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    .badge-soft {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .badge-soft.kpi { background: #e9f0f8; color: var(--navy-kpi); }
+    .badge-soft.kra { background: #e5f2f5; color: var(--cyan-kra); }
+    .badge-soft.okr { background: #faeed9; color: var(--gold-okr); }
+
+    /* Unified Scenario Box */
+    .scenario-item {
+      margin-bottom: 8px;
+    }
+
+    .scenario-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .scenario-item strong {
+      color: var(--text-main);
+      display: block;
+      margin-bottom: 2px;
+      font-size: 0.88rem;
+    }
+
+    /* Footer Takeaways */
+    .takeaway-bar {
+      background: linear-gradient(135deg, #f7f2e7, #eee7d5);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 22px 28px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .takeaway-col {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+    }
+
+    .takeaway-col .icon-dot {
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    .takeaway-col.kpi strong { color: var(--navy-kpi); }
+    .takeaway-col.kra strong { color: var(--cyan-kra); }
+    .takeaway-col.okr strong { color: var(--gold-okr); }
+
+    /* ===== Site footer ===== */
+    .site-footer {
+      max-width: 1280px;
+      margin: 44px auto 0;
+      padding: 22px 16px 0;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      color: #8c8272;
+      font-size: 0.82rem;
+    }
+
+    .site-footer a {
+      color: var(--navy-kpi);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 900px) {
+      .lenses-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .takeaway-bar {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .site-nav {
+        gap: 14px;
+      }
+
+      .site-nav a:not(.nav-dashboard) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Shared site header / menu ===== -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="index.html" aria-label="Kembali ke dashboard materi">
+        <img src="logo-busdev.png" alt="Logo Busdev">
+      </a>
+      <nav class="site-nav" aria-label="Navigasi materi">
+        <a href="#lenses">Tiga Lensa</a>
+        <a href="#comparison">Perbandingan</a>
+        <a href="#deepdive">Bedah Mendalam</a>
+        <a href="#integration">Sinergi</a>
+        <a href="index.html" class="nav-dashboard">&larr; Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    
+    <!-- Title & Brand Header -->
+    <header class="hero-header">
+      <h1 class="hero-title">
+        <span class="kpi">KPI</span>
+        <span class="vs">vs</span>
+        <span class="kra">KRA</span>
+        <span class="vs">vs</span>
+        <span class="okr">OKR</span>
+      </h1>
+      <p class="hero-subtitle">Three Lenses. One Purpose — Performance with Impact.</p>
+    </header>
+
+    <!-- Top 3 Analogy Lenses -->
+    <section class="lenses-grid" id="lenses" aria-label="Analogi Lensa Kinerja">
+      
+      <!-- 1. KPI Card -->
+      <article class="lens-card kpi">
+        <span class="lens-tagline">The Rearview Mirror</span>
+        
+        <div class="art-frame" aria-label="Ilustrasi Kaca Spion">
+          <svg viewBox="0 0 240 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Mirror Housing Outer -->
+            <rect x="15" y="14" width="210" height="72" rx="36" fill="#1b2430" stroke="#475569" stroke-width="3"/>
+            <!-- Inner Mirror Glass -->
+            <rect x="22" y="21" width="196" height="58" rx="29" fill="#8cb1c7"/>
+            <!-- Road Horizon in Mirror -->
+            <path d="M22 62C55 58 185 58 218 62V79H22V62Z" fill="#5c7a8d"/>
+            <path d="M120 54L100 79H140L120 54Z" fill="#3d515e"/>
+            <path d="M120 58V75" stroke="#f1f5f9" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M40 32C65 24 100 24 140 24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          </svg>
+        </div>
+
+        <div class="brush-pill">KPI</div>
+        <div class="full-name">Key Performance Indicators</div>
+        <p class="lens-motto">Melihat ke belakang untuk mengukur seberapa baik pencapaian Anda terhadap target.</p>
+      </article>
+
+      <!-- 2. KRA Card -->
+      <article class="lens-card kra">
+        <span class="lens-tagline">The Dashboard</span>
+        
+        <div class="art-frame" aria-label="Ilustrasi Panel Spidometer">
+          <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Cluster Arch -->
+            <path d="M20 92C20 48 55 12 100 12C145 12 180 48 180 92H20Z" fill="#132a32" stroke="#2c5560" stroke-width="2"/>
+            <!-- Gauge Dial Track -->
+            <path d="M42 86A65 65 0 0 1 158 86" stroke="#254750" stroke-width="12" stroke-linecap="round"/>
+            <path d="M42 86A65 65 0 0 1 125 30" stroke="#38bdf8" stroke-width="12" stroke-linecap="round"/>
+            <!-- Tick marks -->
+            <circle cx="100" cy="85" r="12" fill="#0b171c" stroke="#475569" stroke-width="2"/>
+            <!-- Needle pointing to optimum zone -->
+            <line x1="100" y1="85" x2="135" y2="40" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="100" cy="85" r="5" fill="#f59e0b"/>
+          </svg>
+        </div>
+
+        <div class="brush-pill">KRA</div>
+        <div class="full-name">Key Result Areas</div>
+        <p class="lens-motto">Fokus pada apa yang paling krusial dan area utama tempat hasil nyata diciptakan.</p>
+      </article>
+
+      <!-- 3. OKR Card -->
+      <article class="lens-card okr">
+        <span class="lens-tagline">The Roadmap</span>
+        
+        <div class="art-frame" aria-label="Ilustrasi Jalur Gunung dan Target">
+          <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Back Mountain -->
+            <polygon points="100,16 155,88 45,88" fill="#c49749" opacity="0.45"/>
+            <!-- Main Peak -->
+            <polygon points="118,22 180,92 56,92" fill="#93671f"/>
+            <!-- Peak Snow / Summit Flag -->
+            <line x1="118" y1="14" x2="118" y2="28" stroke="#1f2937" stroke-width="2"/>
+            <path d="M118 15L132 20L118 25V15Z" fill="#e11d48"/>
+            <!-- Winding Path / Road -->
+            <path d="M35 94C75 88 70 70 102 62C116 58 118 42 118 26" stroke="#fef3c7" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <circle cx="68" cy="78" r="4" fill="#d97706"/>
+          </svg>
+        </div>
+
+        <div class="brush-pill">OKR</div>
+        <div class="full-name">Objectives & Key Results</div>
+        <p class="lens-motto">Menatap ke depan, menetapkan target berani, dan memantau akselerasi progres.</p>
+      </article>
+
+    </section>
+
+    <!-- Detailed Comparison Table with W3C Semantics -->
+    <main class="table-container" id="comparison">
+      <table class="comparison-table" aria-label="Tabel Lengkap Perbandingan KPI, KRA, dan OKR">
+        <thead>
+          <tr>
+            <th scope="col" class="th-dimension">Dimensi Kunci</th>
+            <th scope="col" class="th-kpi">KPI (Key Performance Indicators)</th>
+            <th scope="col" class="th-kra">KRA (Key Result Areas)</th>
+            <th scope="col" class="th-okr">OKR (Objectives & Key Results)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row 1: What It Is -->
+          <tr>
+            <th scope="row" class="cell-dim">
+              <div class="dim-label">🎯 What It Is</div>
+              <div class="dim-sub">Hakikat Pengertian</div>
+            </th>
+            <td class="cell-kpi">
+              Metrik operasional kuantitatif yang mengukur efektivitas dan kinerja aktual terhadap target standar yang telah ditetapkan.
+            </td>
+            <td class="cell-kra">
+              Cakupan payung atau area tanggung jawab krusial dari suatu peran/posisi yang menentukan keberhasilan strategi organisasi.
+            </td>
+            <td class="cell-okr">
+              Kerangka kerja penentuan sasaran dinamis dan transformatif untuk mendorong terobosan pencapaian (<em>stretch goals</em>).
+            </td>
+          </tr>
+
+          <!-- Row 2: Focus -->
+          <tr>
+            <th scope="row" class="cell-dim">
+              <div class="dim-label">🧭 Focus</div>
+              <div class="dim-sub">Titik Berat Sasaran</div>
+            </th>
+            <td class="cell-kpi">
+              <span class="badge-soft kpi">Evaluasi Kesehatan</span><br>
+              Pengukuran ketercapaian proses bisnis rutin (<em>performance tracking &amp; stability</em>).
+            </td>
+            <td class="cell-kra">
+              <span class="badge-soft kra">Prioritas Dampak</span><br>
+              Alokasi sumber daya dan energi ke zona kunci yang paling menghasilkan <em>outcome</em>.
+            </td>
+            <td class="cell-okr">
+              <span class="badge-soft okr">Pertumbuhan Cepat</span><br>
+              Inovasi, keselarasan lintas departemen, dan lompatan nilai baru (<em>growth &amp; transformation</em>).
+            </td>
+          </tr>
+
+          <!-- Row 3: Time Horizon -->
+          <tr>
+            <th scope="row" class="cell-dim">
+              <div class="dim-label">⏱️ Time Horizon</div>
+              <div class="dim-sub">Siklus Evaluasi</div>
+            </th>
+            <td class="cell-kpi">
+              <strong>Jangka Pendek – Menengah:</strong><br>
+              Dipantau secara mingguan, bulanan, atau kuartalan secara berkesinambungan.
+            </td>
+            <td class="cell-kra">
+              <strong>Jangka Menengah – Panjang:</strong><br>
+              Umumnya dievaluasi tahunan atau multi-tahun selama mandat jabatan berlangsung.
+            </td>
+            <td class="cell-okr">
+              <strong>Siklus Kuartalan:</strong><br>
+              Ditetapkan dan dievaluasi setiap 3 bulan untuk menjaga kelincahan (<em>agility</em>).
+            </td>
+          </tr>
+
+          <!-- Row 4: Nature -->
+          <tr>
+            <th scope="row" class="cell-dim">
+              <div class="dim-label">📊 Nature</div>
+              <div class="dim-sub">Sifat Data & Karakter</div>
+            </th>
+            <td class="cell-kpi">
+              <strong>Kuantitatif Murni</strong><br>
+              Berbasis data numerik, rasio, persentase target yang baku (<em>numbers-driven</em>).
+            </td>
+            <td class="cell-kra">
+              <strong>Kualitatif & Konseptual</strong><br>
+              Mendefinisikan ruang lingkup kontribusi (<em>outcome-driven</em>).
+            </td>
+            <td class="cell-okr">
+              <strong>Kombinasi Sinergis</strong><br>
+              <strong>Objective:</strong> Kualitatif & inspiratif.<br>
+              <strong>Key Results:</strong> Kuantitatif & terukur ketat.
+            </td>
+          </tr>
+
+          <!-- Row 5: Integrated Example -->
+          <tr>
+            <th scope="row" class="cell-dim">
+              <div class="dim-label">💡 Contoh Riil</div>
+              <div class="dim-sub">Skenario Layanan Pelanggan</div>
+            </th>
+            <td class="cell-kpi">
+              <div class="scenario-item">
+                <strong>Metrik Operasional Harian:</strong>
+                • CSAT Score &ge; 90%<br>
+                • Response Time &lt; 5 menit<br>
+                • Target tiket selesai: 98%
+              </div>
+            </td>
+            <td class="cell-kra">
+              <div class="scenario-item">
+                <strong>Area Mandat Manajer CS:</strong>
+                • Kepuasan Pelanggan & Retensi Akun<br>
+                • Efisiensi Resolusi Isu Operasional<br>
+                • Peningkatan Kualitas Tim Support
+              </div>
+            </td>
+            <td class="cell-okr">
+              <div class="scenario-item">
+                <strong>Objective (Aspiratif):</strong><br>
+                Menciptakan pengalaman layanan pelanggan paling membahagiakan di industri.
+              </div>
+              <div class="scenario-item">
+                <strong>Key Results:</strong><br>
+                1. Naikkan NPS dari 40 ke 70 pada Q3.<br>
+                2. Luncurkan pusat bantuan mandiri (self-service) baru.
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+    <!-- Bottom Takeaway Summary -->
+    <footer class="takeaway-bar" aria-label="Kesimpulan Utama">
+      <div class="takeaway-col kpi">
+        <span class="icon-dot">🎯</span>
+        <div>
+          <strong>KPI</strong> memberi tahu <em>how well you did</em><br>
+          <span style="font-size: 0.83rem; color: #666;">Mengukur performa operasional yang telah dicapai.</span>
+        </div>
+      </div>
+
+      <div class="takeaway-col kra">
+        <span class="icon-dot">🧭</span>
+        <div>
+          <strong>KRA</strong> memberi tahu <em>where to focus</em><br>
+          <span style="font-size: 0.83rem; color: #666;">Menentukan koridor area tanggung jawab utama.</span>
+        </div>
+      </div>
+
+      <div class="takeaway-col okr">
+        <span class="icon-dot">🚀</span>
+        <div>
+          <strong>OKR</strong> memberi tahu <em>where to go</em><br>
+          <span style="font-size: 0.83rem; color: #666;">Menantang batas organisasi menuju sasaran lompatan.</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- DEEP DIVE ENCYCLOPEDIA & KNOWLEDGE SECTION -->
+    <!-- ========================================== -->
+    <section class="deepdive-section" id="deepdive" aria-label="Pengetahuan Detail Framework">
+      
+      <div class="section-heading">
+        <h2>Bedah Mendalam &amp; Pengetahuan Umum Pilar Kinerja</h2>
+        <p>Memahami arsitektur, siklus kerja, formula penyusunan, dan studi kasus lintas departemen.</p>
+      </div>
+
+      <div class="knowledge-cards-stack">
+        
+        <!-- CARD 1: KPI DEEP DIVE -->
+        <article class="deep-card kpi-border">
+          <header class="deep-header">
+            <span class="deep-badge kpi-bg">Lensa 01 • Metrik Kesehatan</span>
+            <h3>KPI (Key Performance Indicators)</h3>
+            <p class="deep-tagline">"Kaca Spion" yang memantau performa rutin operasional (<em>Business-as-Usual</em>).</p>
+          </header>
+
+          <div class="deep-content-grid">
+            <div class="deep-box">
+              <h4>🎯 Hakikat &amp; Karakteristik Kunci</h4>
+              <ul>
+                <li><strong>Sifat Data:</strong> 100% Kuantitatif numerik (Rasio, Nilai Mata Uang, Waktu, Persentase).</li>
+                <li><strong>Fungsi Pokok:</strong> Mengukur stabilitas mesin bisnis. Menandakan apakah proses bisnis sedang dalam kondisi sehat atau sedang "mogok".</li>
+                <li><strong>Lagging vs Leading Indicator:</strong>
+                  <ul>
+                    <li><em>Lagging (Hasil):</em> Total Omset Kuartalan, Angka Churn Rate (hanya bisa diukur setelah terjadi).</li>
+                    <li><em>Leading (Aktivitas Pemicu):</em> Jumlah panggilan sales, waktu respons tiket per hari.</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="deep-box">
+              <h4>📐 Anatomi Rumus KPI Efektif (SMART)</h4>
+              <div class="formula-box">
+                <code>KPI = [Metrik Kuantitatif] + [Kondisi / Baseline] + [Batas Waktu/Frekuensi]</code>
+              </div>
+              <p class="formula-example">Contoh: "Mempertahankan Server Uptime &ge; 99,95% setiap siklus bulanan".</p>
+              
+              <div class="pitfall-box">
+                <span class="pitfall-title">⚠️ Jebakan Umum (Common Pitfall):</span>
+                Mengukur terlalu banyak metrik (<em>Metric Overload</em>). Jika ada 30 metrik, tidak ada yang menjadi prioritas (<em>Key</em>). Batasi 3–5 KPI per jabatan.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 2: KRA DEEP DIVE -->
+        <article class="deep-card kra-border">
+          <header class="deep-header">
+            <span class="deep-badge kra-bg">Lensa 02 • Koridor Tanggung Jawab</span>
+            <h3>KRA (Key Result Areas)</h3>
+            <p class="deep-tagline">"Panel Dashboard" yang memandu fokus energi dan mandat strategis peran kerja.</p>
+          </header>
+
+          <div class="deep-content-grid">
+            <div class="deep-box">
+              <h4>🧭 Hakikat &amp; Karakteristik Kunci</h4>
+              <ul>
+                <li><strong>Sifat Data:</strong> Kualitatif &amp; Konseptual. Menjadi payung bagi deskripsi pekerjaan (<em>Job Description</em>).</li>
+                <li><strong>Fungsi Pokok:</strong> Menjawab pertanyaan: <em>"Untuk apa posisi ini digaji di perusahaan?"</em> dan <em>"Area mana yang jika gagal, bisnis runtuh?"</em></li>
+                <li><strong>Rentang Waktu:</strong> Jangka menengah ke panjang (Tahunan atau selama individu memegang jabatan tersebut).</li>
+                <li><strong>Batas Ideal:</strong> Seseorang umumnya hanya dapat mengelola 3 sampai 6 KRA secara optimal.</li>
+              </ul>
+            </div>
+
+            <div class="deep-box">
+              <h4>📐 Cara Merumuskan KRA</h4>
+              <div class="formula-box">
+                <code>KRA = [Kata Kerja Aksi] + [Cakupan Bisnis Kritis] + [Dampak/Outcome]</code>
+              </div>
+              <p class="formula-example">Contoh: "Mengembangkan Kapabilitas Talenta Digital guna Mempercepat Transformasi Produk".</p>
+              
+              <div class="pitfall-box">
+                <span class="pitfall-title">⚠️ Jebakan Umum (Common Pitfall):</span>
+                Menyamakan KRA dengan daftar tugas harian (<em>To-Do List</em>). KRA berfokus pada <em>hasil akhir peran</em>, bukan sekadar aktivitas mengetik laporan atau menghadiri rapat.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 3: OKR DEEP DIVE -->
+        <article class="deep-card okr-border">
+          <header class="deep-header">
+            <span class="deep-badge okr-bg">Lensa 03 • Kompas Akselerasi</span>
+            <h3>OKR (Objectives &amp; Key Results)</h3>
+            <p class="deep-tagline">"Peta Jalan / Roadmap" yang menembus status-quo menuju lompatan target ambisius.</p>
+          </header>
+
+          <div class="deep-content-grid">
+            <div class="deep-box">
+              <h4>🚀 Hakikat &amp; Karakteristik Kunci</h4>
+              <ul>
+                <li><strong>Objective (O):</strong> Kualitatif, inspiratif, ringkas, memicu gairah (Menjawab: <em>Ke mana kita ingin melompat?</em>).</li>
+                <li><strong>Key Results (KR):</strong> Kuantitatif, terikat tenggat, memiliki angka awal (<em>baseline</em>) dan angka sasaran (<em>target</em>) (Menjawab: <em>Bagaimana membuktikan kita telah sampai?</em>).</li>
+                <li><strong>Prinsip Stretch Goals (Moonshot):</strong> Ketercapaian 70% pada target ambisius dinilai luar biasa, karena tujuan OKR adalah mendobrak batasan biasa.</li>
+                <li><strong>Siklus Dinamis:</strong> Berjalan kuartalan (3 bulan) agar perusahaan lincah (<em>agile</em>) beradaptasi terhadap disrupsi pasar.</li>
+              </ul>
+            </div>
+
+            <div class="deep-box">
+              <h4>📐 Formula Standar John Doerr (Measure What Matters)</h4>
+              <div class="formula-box">
+                <code>Kami akan [Objective kualitatif], diukur oleh [3–5 Key Results kuantitatif].</code>
+              </div>
+              <p class="formula-example">Contoh:<br>
+                <strong>O:</strong> Mendominasi pasar pembayaran digital tier-2.<br>
+                <strong>KR 1:</strong> Akuisisi 50.000 merchant aktif baru di Jawa Timur.<br>
+                <strong>KR 2:</strong> Tingkatkan volume transaksi bulanan dari 10M ke 35M IDR.
+              </p>
+              
+              <div class="pitfall-box">
+                <span class="pitfall-title">⚠️ Jebakan Umum (Common Pitfall):</span>
+                Menjadikan OKR sebagai basis langsung pemotongan bonus/gaji. Jika OKR dijadikan evaluasi hukuman gaji, tim akan membuat target yang mudah dan kehilangan sifat beraninya.
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- MULTI-DEPARTMENT INTEGRATION TABLE -->
+      <section class="integration-showcase" id="integration">
+        <div class="showcase-title">
+          <h3>Sinergi Triad: Contoh Penerapan Serentak Lintas Departemen</h3>
+          <p>Melihat bagaimana KRA, KPI, dan OKR saling melengkapi tanpa saling menggantikan.</p>
+        </div>
+
+        <div class="multi-dept-grid">
+          
+          <!-- Dept 1: Marketing -->
+          <div class="dept-card">
+            <div class="dept-badge">Divisi Pemasaran (Marketing)</div>
+            <div class="dept-row">
+              <span class="label-tag kra">KRA (Fokus):</span>
+              <p>Perluasan Jangkauan Merek &amp; Akuisisi Prospek Berkualitas.</p>
+            </div>
+            <div class="dept-row">
+              <span class="label-tag kpi">KPI (Operasional Rutin):</span>
+              <p>Cost per Lead (CPL) &lt; Rp 25.000; Konversi traffic ke lead &ge; 3,5%.</p>
+            </div>
+            <div class="dept-row">
+              <span class="label-tag okr">OKR (Lompatan Kuartal Ini):</span>
+              <p><strong>O:</strong> Menjadi pembicaraan utama di kalangan Gen-Z.<br>
+                 <strong>KR:</strong> Capai 500K views TikTok organik &amp; 15.000 pendaftar <em>early-access</em> dalam 60 hari.</p>
+            </div>
+          </div>
+
+          <!-- Dept 2: Engineering -->
+          <div class="dept-card">
+            <div class="dept-badge">Divisi Rekayasa Perangkat Lunak (Engineering)</div>
+            <div class="dept-row">
+              <span class="label-tag kra">KRA (Fokus):</span>
+              <p>Keandalan Arsitektur Sistem &amp; Kecepatan Rilis Produk.</p>
+            </div>
+            <div class="dept-row">
+              <span class="label-tag kpi">KPI (Operasional Rutin):</span>
+              <p>System Uptime &ge; 99,98%; Rata-rata waktu penyelesaian bug kritis &lt; 2 jam.</p>
+            </div>
+            <div class="dept-row">
+              <span class="label-tag okr">OKR (Lompatan Kuartal Ini):</span>
+              <p><strong>O:</strong> Memodernisasi pipeline deployment tanpa downtime.<br>
+                 <strong>KR:</strong> Migrasi 100% microservice ke arsitektur Kubernetes &amp; kurangi latensi API hingga 40%.</p>
+            </div>
+          </div>
+
+          <!-- Dept 3: Human Resources -->
+          <div class="dept-card">
+            <div class="dept-badge">Divisi Sumber Daya Manusia (People &amp; Culture)</div>
+            <div class="dept-row">
+              <span class="label-tag kra">KRA (Fokus):</span>
+              <p>Retensi Talenta Unggul &amp; Produktivitas Budaya Kerja.</p>
+            </div>
+            <div class="dept-row">
+              <span class="label-tag kpi">KPI (Operasional Rutin):</span>
+              <p>Tingkat perputaran karyawan (Turnover Rate) &lt; 5% per tahun; Time-to-hire &lt; 25 hari.</p>
+            </div>
+            <div class="dept-row">
+              <span class="label-tag okr">OKR (Lompatan Kuartal Ini):</span>
+              <p><strong>O:</strong> Membangun lingkungan kerja remote paling sehat dan suportif.<br>
+                 <strong>KR:</strong> Tingkatkan Employee eNPS dari 25 ke 60 &amp; luncurkan program bimbingan karir 1-on-1 ke seluruh tim.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </section>
+
+  </div>
+
+  <!-- ===== Site footer ===== -->
+  <footer class="site-footer">
+    <span>Materi 08 &bull; KPI, KRA &amp; OKR — Performance Framework</span>
+    <a href="index.html">&larr; Kembali ke Dashboard Materi</a>
+  </footer>
+
+  <style>
+    /* Styling Tambahan untuk Sesi Deep Dive */
+    .deepdive-section {
+      margin-top: 50px;
+      scroll-margin-top: 90px;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .section-heading p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .knowledge-cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .deep-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--card-shadow);
+      padding: 28px 24px;
+      transition: transform 0.2s ease;
+    }
+
+    .deep-card.kpi-border { border-left: 6px solid var(--navy-kpi); }
+    .deep-card.kra-border { border-left: 6px solid var(--cyan-kra); }
+    .deep-card.okr-border { border-left: 6px solid var(--gold-okr); }
+
+    .deep-header {
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 14px;
+    }
+
+    .deep-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .deep-badge.kpi-bg { background: var(--navy-kpi); }
+    .deep-badge.kra-bg { background: var(--cyan-kra); }
+    .deep-badge.okr-bg { background: var(--gold-okr); }
+
+    .deep-header h3 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .deep-tagline {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 3px;
+    }
+
+    .deep-content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .deep-box h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .deep-box ul {
+      padding-left: 18px;
+      font-size: 0.9rem;
+      color: #475569;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .deep-box ul ul {
+      margin-top: 6px;
+      padding-left: 16px;
+      gap: 4px;
+    }
+
+    .formula-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+
+    .formula-box code {
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #0f172a;
+      font-weight: 600;
+      display: block;
+      word-break: break-word;
+    }
+
+    .formula-example {
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      background: #faf7f0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 3px solid #cfc6b5;
+    }
+
+    .pitfall-box {
+      background: #fff8f6;
+      border: 1px solid #fed7d7;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: #9c4221;
+      line-height: 1.45;
+    }
+
+    .pitfall-title {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* Integration Section */
+    .integration-showcase {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--card-shadow);
+      padding: 28px 24px;
+      scroll-margin-top: 90px;
+    }
+
+    .showcase-title {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .showcase-title h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .showcase-title p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .multi-dept-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .dept-card {
+      background: #fbfaf7;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dept-badge {
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #1e293b;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e7decb;
+    }
+
+    .dept-row {
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .label-tag {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+
+    .label-tag.kra { background: #e0f2f1; color: var(--cyan-kra); }
+    .label-tag.kpi { background: #e0e7ff; color: var(--navy-kpi); }
+    .label-tag.okr { background: #fef3c7; color: var(--gold-okr); }
+
+    @media (max-width: 900px) {
+      .deep-content-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .multi-dept-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+  </style>
+
+</body>
+</html>
